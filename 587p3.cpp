@@ -29,8 +29,8 @@ main (int argc, char **argv)
   long long A [side][side];
   long long B [side];
   long long C [side];
-  for(int i, i<side-1, i++){
-      for(int j, j<side-1, j++){
+  for(int i; i<side-1; i++){
+      for(int j; j<side-1; j++){
         A[i][j] = row*side+i+(column*side+j)*n;
       }
   } //init
@@ -38,8 +38,8 @@ main (int argc, char **argv)
   MPI_Barrier(MPI_COMM_WORLD);
   int start_time = MPI_Wtime();
 
-  for(int m, m<9, m++){
-    for(int p, p<side-1, p++){
+  for(int m; m<9; m++){
+    for(int p; p<side-1; p++){
       B[p] = A[p][0];
     }
     if(column != 0){
@@ -47,7 +47,7 @@ main (int argc, char **argv)
     }
     if(column != temp-1){
       MPI_RECEIVE(&C,side,long long,rank+1,1,MPI_COMM_WORLD);
-      for(int q=0, q<side-1, q++){
+      for(int q=0; q<side-1; q++){
         A[q][side] = C[q];
       }
     }
@@ -63,8 +63,8 @@ main (int argc, char **argv)
     if(row != temp-1 && column != temp-1){
       MPI_RECEIVE(&A[side][side],1,long long,rank-temp,1,MPI_COMM_WORLD);
     }
-    for(int x, x<side-1, x++){
-      for(int y, y<side-1, y++){
+    for(int x; x<side-1; x++){
+      for(int y; y<side-1; y++){
         if(row==0 && x==0){}
         else if(column==0 && y==0){}
         else if(row==side-1 && x>=n-side*row){}
@@ -76,10 +76,10 @@ main (int argc, char **argv)
     }
   }//itearationsmessage
 
-  for(int i, i<side-1, i++){
-    for(int j, j<side-1, j++){
+  for(int i; i<side-1; i++){
+    for(int j; j<side-1; j++){
       sum += A[i][j];
-      if(row*side+i==n/2 && column*side+j==n/2 ){
+      if(row*side+i==n/2 && column*side+j==n/2){
         mark=1;
         middle_value = A[i][j];
       }
@@ -96,7 +96,7 @@ main (int argc, char **argv)
     int mid_proc;
     mid_proc=(!n/temp)?(p+temp)/2,(p-temp)/2-1;
     MPI_RECEIVE(&middle_value,1,long long,mid_proc,1,MPI_COMM_WORLD);
-    for(int i=1, i<p, i++){
+    for(int i=1; i<p; i++){
       MPI_RECEIVE(&sum_received,1,long long,i,1,MPI_COMM_WORLD);
       sum+=sum_received;
     }
