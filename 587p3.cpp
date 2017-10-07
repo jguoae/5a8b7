@@ -43,25 +43,25 @@ main (int argc, char **argv)
       B[p] = A[p][0];
     }
     if(column != 0){
-      MPI_SEND(&B,side,long long,rank-1,1,MPI_COMM_WORLD);
+      MPI_Send(&B,side,MPI_LONG_LONG,rank-1,1,MPI_COMM_WORLD);
     }
     if(column != temp-1){
-      MPI_RECEIVE(&C,side,long long,rank+1,1,MPI_COMM_WORLD);
+      MPI_Recv(&C,side,MPI_LONG_LONG,rank+1,1,MPI_COMM_WORLD);
       for(int q=0; q<side-1; q++){
         A[q][side] = C[q];
       }
     }
     if(row != 0){
-      MPI_SEND(&A[0],side,long long,rank-temp,1,MPI_COMM_WORLD);
+      MPI_Send(&A[0],side,MPI_LONG_LONG,rank-temp,1,MPI_COMM_WORLD);
     }
     if(row != temp-1){
-      MPI_RECEIVE(&A[side],side,long long,rank+temp,1,MPI_COMM_WORLD);
+      MPI_Recv(&A[side],side,MPI_LONG_LONG,rank+temp,1,MPI_COMM_WORLD);
     }
     if(row != 0 && column != 0){
-      MPI_SEND(&A[0][0],1,long long,rank-temp,1,MPI_COMM_WORLD);
+      MPI_Send(&A[0][0],1,MPI_LONG_LONG,rank-temp,1,MPI_COMM_WORLD);
     }
     if(row != temp-1 && column != temp-1){
-      MPI_RECEIVE(&A[side][side],1,long long,rank-temp,1,MPI_COMM_WORLD);
+      MPI_Recv(&A[side][side],1,MPI_LONG_LONG,rank-temp,1,MPI_COMM_WORLD);
     }
     for(int x; x<side-1; x++){
       for(int y; y<side-1; y++){
@@ -86,24 +86,24 @@ main (int argc, char **argv)
     }
   }
   if(rank!=0){
-    MPI_SEND(&sum,1,long long,0,1,MPI_COMM_WORLD);
+    MPI_Send(&sum,1,MPI_LONG_LONG,0,1,MPI_COMM_WORLD);
     if(mark){
-      MPI_SEND(&middle_value,1,long long,0,1,MPI_COMM_WORLD);
+      MPI_Send(&middle_value,1,MPI_LONG_LONG,0,1,MPI_COMM_WORLD);
     }
   }
   else{
     long long sum_received;
     int mid_proc;
     mid_proc=(!n/temp)?(p+temp)/2,(p-temp)/2-1;
-    MPI_RECEIVE(&middle_value,1,long long,mid_proc,1,MPI_COMM_WORLD);
+    MPI_Recv(&middle_value,1,MPI_LONG_LONG,mid_proc,1,MPI_COMM_WORLD);
     for(int i=1; i<p; i++){
-      MPI_RECEIVE(&sum_received,1,long long,i,1,MPI_COMM_WORLD);
+      MPI_Recv(&sum_received,1,MPI_LONG_LONG,i,1,MPI_COMM_WORLD);
       sum+=sum_received;
     }
   }
   MPI_Barrier(MPI_COMM_WORLD);
   if(rank==0){
-    int end_time = MPI_WTime();
+    int end_time = MPI_Wtime();
     std::cout << "/*Time*/" << end_time-start_time << std::endl;
     std::cout << "/* Sum */" << sum << std::endl;
     std::cout << "/* Middle value */" << middle_value << std::endl;
