@@ -46,7 +46,7 @@ main (int argc, char **argv)
       MPI_Send(&B,side,MPI_LONG_LONG,rank-1,1,MPI_COMM_WORLD);
     }
     if(column != temp-1){
-      MPI_Recv(&C,side,MPI_LONG_LONG,rank+1,1,MPI_COMM_WORLD);
+      MPI_Recv(&C,side,MPI_LONG_LONG,rank+1,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
       for(int q=0; q<side-1; q++){
         A[q][side] = C[q];
       }
@@ -55,13 +55,13 @@ main (int argc, char **argv)
       MPI_Send(&A[0],side,MPI_LONG_LONG,rank-temp,1,MPI_COMM_WORLD);
     }
     if(row != temp-1){
-      MPI_Recv(&A[side],side,MPI_LONG_LONG,rank+temp,1,MPI_COMM_WORLD);
+      MPI_Recv(&A[side],side,MPI_LONG_LONG,rank+temp,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
     }
     if(row != 0 && column != 0){
       MPI_Send(&A[0][0],1,MPI_LONG_LONG,rank-temp,1,MPI_COMM_WORLD);
     }
     if(row != temp-1 && column != temp-1){
-      MPI_Recv(&A[side][side],1,MPI_LONG_LONG,rank-temp,1,MPI_COMM_WORLD);
+      MPI_Recv(&A[side][side],1,MPI_LONG_LONG,rank-temp,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
     }
     for(int x; x<side-1; x++){
       for(int y; y<side-1; y++){
@@ -94,10 +94,10 @@ main (int argc, char **argv)
   else{
     long long sum_received;
     int mid_proc;
-    mid_proc=(!n/temp)?(p+temp)/2,(p-temp)/2-1;
-    MPI_Recv(&middle_value,1,MPI_LONG_LONG,mid_proc,1,MPI_COMM_WORLD);
+    mid_proc=(!n/temp)?(p+temp)/2:(p-temp)/2-1;
+    MPI_Recv(&middle_value,1,MPI_LONG_LONG,mid_proc,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
     for(int i=1; i<p; i++){
-      MPI_Recv(&sum_received,1,MPI_LONG_LONG,i,1,MPI_COMM_WORLD);
+      MPI_Recv(&sum_received,1,MPI_LONG_LONG,i,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
       sum+=sum_received;
     }
   }
