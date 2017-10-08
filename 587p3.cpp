@@ -41,6 +41,9 @@ main (int argc, char **argv)
   //std::cout << "hello world  " << p << std::endl;
 
   for(int m; m<9; m++){
+    if(rank==0){
+      std::cout << "hello world  " << p << std::endl;
+    }
     for(int p; p<side-1; p++){
       B[p] = A[p][0];
     }
