@@ -17,7 +17,7 @@ main (int argc, char **argv)
   MPI_Init (&argc, &argv);
   int rank,p,row,column,temp,side;
   bool mark;
-  long long sum = 0,middle_value;
+  long long sum = 0,middle_value = 0;
   int n = atoi(argv[1]);
 
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -88,14 +88,6 @@ main (int argc, char **argv)
         else if(column==temp-1 && y>=n-side*row-1){}
         else{
           A[x][y] = f(A[x][y],A[x+1][y],A[x][y+1],A[x+1][y+1]);
-        }  if(rank==0){
-    for(int i=0; i<side-1; i++){
-      for(int j=0; j<side-1; j++){
-        // cout<<A[i][j]<<" ";
-      }
-      // cout<<endl;
-    }
-  }
       }
     }
     MPI_Barrier(MPI_COMM_WORLD);
