@@ -99,7 +99,7 @@ main (int argc, char **argv)
   if(rank!=0){
     MPI_Send(&sum,1,MPI_LONG_LONG,0,1,MPI_COMM_WORLD);
     if(mark){
-      // MPI_Send(&middle_value,1,MPI_LONG_LONG,0,1,MPI_COMM_WORLD);
+      MPI_Send(&middle_value,1,MPI_LONG_LONG,0,1,MPI_COMM_WORLD);
     }
   }
   else{
@@ -110,14 +110,14 @@ main (int argc, char **argv)
       MPI_Recv(&sum_received,1,MPI_LONG_LONG,i,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
       sum+=sum_received;
     }
-    // MPI_Recv(&middle_value,1,MPI_LONG_LONG,mid_proc,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+    MPI_Recv(&middle_value,1,MPI_LONG_LONG,mid_proc,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
   }
   MPI_Barrier(MPI_COMM_WORLD);
   if(rank==0){
     int end_time = MPI_Wtime();
     std::cout << "Time : " << end_time-start_time << std::endl;
     std::cout << "Sum : " << sum << std::endl;
-    // std::cout << "Middle value :" << middle_value << std::endl;
+    std::cout << "Middle value :" << middle_value << std::endl;
   }
 
   MPI_Finalize();
