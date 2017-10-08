@@ -88,6 +88,7 @@ main (int argc, char **argv)
         else if(column==temp-1 && y>=n-side*row-1){}
         else{
           A[x][y] = f(A[x][y],A[x+1][y],A[x][y+1],A[x+1][y+1]);
+        }
       }
     }
     MPI_Barrier(MPI_COMM_WORLD);
