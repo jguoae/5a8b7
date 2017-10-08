@@ -85,7 +85,7 @@ main (int argc, char **argv)
         if(row==0 && x==0){}
         else if(column==0 && y==0){}
         else if(row==temp-1 && x>=n-side*row-1){}
-        else if(column==temp-1 && y>=n-side*row-1){}
+        else if(column==temp-1 && y>=n-side*column-1){}
         else{
           A[x][y] = f(A[x][y],A[x+1][y],A[x][y+1],A[x+1][y+1]);
         }
