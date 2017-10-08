@@ -44,15 +44,15 @@ main (int argc, char **argv)
 
 
   for(int m=0; m<10; m++){
-    if(rank==1){
-      std::cout << "hello world  " << std::endl;
-      for(int i=0; i<side; i++){
-          for(int j=0; j<side; j++){
-            cout<<A[i][j]<<" ";
-          }
-          cout<<endl;
-      }
-    }
+    // if(rank==1){
+    //   std::cout << "hello world  " << std::endl;
+    //   for(int i=0; i<side; i++){
+    //       for(int j=0; j<side; j++){
+    //         cout<<A[i][j]<<" ";
+    //       }
+    //       cout<<endl;
+    //   }
+    // }
     for(int p=0; p<side; p++){
       B[p] = A[p][0];
     }
@@ -128,6 +128,7 @@ main (int argc, char **argv)
   }
   if(rank==0){
     int end_time = MPI_Wtime();
+    std::cout << "n : " << n << "#Proccessor :" << p << std::endl;
     std::cout << "Time : " << end_time-start_time << std::endl;
     std::cout << "Sum : " << sum << std::endl;
     std::cout << "Middle value :" << middle_value << std::endl;
