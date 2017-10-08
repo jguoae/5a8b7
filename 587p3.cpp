@@ -35,6 +35,7 @@ main (int argc, char **argv)
       }
   } //init
 
+  cout<<n<<endl;
   MPI_Barrier(MPI_COMM_WORLD);
   int start_time = MPI_Wtime();
   if(rank==0){
