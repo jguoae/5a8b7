@@ -72,9 +72,9 @@ main (int argc, char **argv)
         else{
           A[x][y] = f(A[x][y],A[x+1][y],A[x][y+1],A[x+1][y+1]);
         }
-      }PBS
+      }
     }
-  }//itearationsmessage
+  }//itearations
 
   for(int i; i<side-1; i++){
     for(int j; j<side-1; j++){
