@@ -32,6 +32,7 @@ main (int argc, char **argv)
   for(int i; i<side-1; i++){
       for(int j; j<side-1; j++){
         A[i][j] = row*side+i+(column*side+j)*n;
+        cout<<A[i][j]<<" ";
       }
   } //init
 
@@ -41,9 +42,9 @@ main (int argc, char **argv)
   if(rank==0){
     for(int i; i<side-1; i++){
       for(int j; j<side-1; j++){
-        cout<<A[i][j]<<" ";
+        // cout<<A[i][j]<<" ";
       }
-      cout<<endl;
+      // cout<<endl;
     }
   }
 
