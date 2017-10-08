@@ -48,15 +48,15 @@ main (int argc, char **argv)
 
 
   for(int m=0; m<10; m++){
-    // if(rank==1){
-    //   std::cout << "hello world  " << std::endl;
-    //   for(int i=0; i<side; i++){
-    //       for(int j=0; j<side; j++){
-    //         cout<<A[i][j]<<" ";
-    //       }
-    //       cout<<endl;
-    //   }
-    // }
+    if(rank==1){
+      std::cout << "hello world  " << std::endl;
+      for(int i=0; i<side; i++){
+          for(int j=0; j<side; j++){
+            cout<<A[i][j]<<" ";
+          }
+          cout<<endl;
+      }
+    }
     for(int p=0; p<side; p++){
       B[p] = A[p][0];
     }
@@ -92,7 +92,15 @@ main (int argc, char **argv)
         else if(column==temp-1 && y>=n-side*column-1){}
         else{
           A[x][y] = f(A[x][y],A[x+1][y],A[x][y+1],A[x+1][y+1]);
-        }
+        }    if(rank==1){
+      std::cout << "hello world  " << std::endl;
+      for(int i=0; i<side; i++){
+          for(int j=0; j<side; j++){
+            cout<<A[i][j]<<" ";
+          }
+          cout<<endl;
+      }
+    }
       }
     }
     MPI_Barrier(MPI_COMM_WORLD);
@@ -101,10 +109,10 @@ main (int argc, char **argv)
   for(int i=0; i<side; i++){
     for(int j=0; j<side; j++){
       sum += A[i][j];
-      // if(row*side+i==n/2 && column*side+j==n/2){
+      if(row*side+i==n/2 && column*side+j==n/2){
       //   mark=1;
-      //   middle_value = A[i][j];
-      // }
+      middle_value = A[i][j];
+      }
     }
   }
   if(rank!=0){
