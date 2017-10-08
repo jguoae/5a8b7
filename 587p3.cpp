@@ -48,15 +48,15 @@ main (int argc, char **argv)
 
 
   for(int m=0; m<10; m++){
-    // if(rank==1){
-    //   std::cout << "hello world  " << std::endl;
-    //   for(int i=0; i<side; i++){
-    //       for(int j=0; j<side; j++){
-    //         cout<<A[i][j]<<" ";
-    //       }
-    //       cout<<endl;
-    //   }
-    // }
+    if(rank==1){
+      std::cout << "hello world  " << std::endl;
+      for(int i=0; i<side; i++){
+          for(int j=0; j<side; j++){
+            cout<<A[i][j]<<" ";
+          }
+          cout<<endl;
+      }
+    }
     for(int p=0; p<side; p++){
       B[p] = A[p][0];
     }
@@ -101,10 +101,10 @@ main (int argc, char **argv)
   for(int i=0; i<side; i++){
     for(int j=0; j<side; j++){
       sum += A[i][j];
-      if(row*side+i==n/2 && column*side+j==n/2){
-        mark=1;
-        middle_value = A[i][j];
-      }
+      // if(row*side+i==n/2 && column*side+j==n/2){
+      //   mark=1;
+      //   middle_value = A[i][j];
+      // }
     }
   }
   if(rank!=0){
