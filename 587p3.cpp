@@ -121,17 +121,17 @@ main (int argc, char **argv)
     // MPI_Recv(&middle_value,1,MPI_LONG_LONG,mid_proc,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
   }
   MPI_Barrier(MPI_COMM_WORLD);
-  if(mark && rank!=0){
-    MPI_Send(&middle_value,1,MPI_LONG_LONG,0,1,MPI_COMM_WORLD);
-  }
-  else if(rank==0){
-    MPI_Recv(&middle_value,1,MPI_LONG_LONG,MPI_ANY_SOURCE,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-  }
+  // if(mark && rank!=0){
+  //   MPI_Send(&middle_value,1,MPI_LONG_LONG,0,1,MPI_COMM_WORLD);
+  // }
+  // else if(rank==0){
+  //   MPI_Recv(&middle_value,1,MPI_LONG_LONG,MPI_ANY_SOURCE,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+  // }
   if(rank==0){
     int end_time = MPI_Wtime();
     std::cout << "Time : " << end_time-start_time << std::endl;
     std::cout << "Sum : " << sum << std::endl;
-    std::cout << "Middle value :" << middle_value << std::endl;
+    // std::cout << "Middle value :" << middle_value << std::endl;
   }
 
   MPI_Finalize();
