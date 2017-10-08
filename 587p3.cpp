@@ -110,8 +110,8 @@ main (int argc, char **argv)
     for(int j=0; j<side; j++){
       sum += A[i][j];
       if(row*side+i==n/2 && column*side+j==n/2){
-      //   mark=1;
-      middle_value = A[i][j];
+        mark=1;
+        middle_value = A[i][j];
       }
     }
   }
