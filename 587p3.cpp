@@ -38,11 +38,11 @@ main (int argc, char **argv)
   MPI_Barrier(MPI_COMM_WORLD);
   int start_time = MPI_Wtime();
 
-  //std::cout << "hello world  " << p << std::endl;
+  std::cout << A << p << std::endl;
 
   for(int m; m<9; m++){
     if(rank==0){
-      std::cout << "hello world  " << p << std::endl;
+      std::cout << "hello world  " << std::endl;
     }
     for(int p; p<side-1; p++){
       B[p] = A[p][0];
