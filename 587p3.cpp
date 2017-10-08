@@ -48,7 +48,7 @@ main (int argc, char **argv)
       std::cout << "hello world  " << std::endl;
       for(int i=0; i<side; i++){
           for(int j=0; j<side; j++){
-            cout<<A[i][j];
+            cout<<A[i][j]<<" ";
           }
           cout<<endl;
       }
@@ -84,8 +84,8 @@ main (int argc, char **argv)
       for(int y=0; y<side; y++){
         if(row==0 && x==0){}
         else if(column==0 && y==0){}
-        else if(row==side-1 && x>=n-side*row-1){}
-        else if(column==side-1 && y>=n-side*row-1){}
+        else if(row==temp-1 && x>=n-side*row-1){}
+        else if(column==temp-1 && y>=n-side*row-1){}
         else{
           A[x][y] = f(A[x][y],A[x+1][y],A[x][y+1],A[x+1][y+1]);
         }  if(rank==0){
