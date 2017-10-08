@@ -70,6 +70,7 @@ main (int argc, char **argv)
     if(row != 0 && column != 0){
       MPI_Send(&A[0][0],1,MPI_LONG_LONG,rank-temp-1,1,MPI_COMM_WORLD);
     }
+
     if(row != temp-1 && column != temp-1){
       MPI_Recv(&A[side][side],1,MPI_LONG_LONG,rank+temp+1,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
     }
@@ -81,7 +82,14 @@ main (int argc, char **argv)
         else if(column==side-1 && y>=n-side*row){}
         else{
           A[x][y] = f(A[x][y],A[x+1][y],A[x][y+1],A[x+1][y+1]);
-        }
+        }  if(rank==0){
+    for(int i=0; i<side-1; i++){
+      for(int j=0; j<side-1; j++){
+        // cout<<A[i][j]<<" ";
+      }
+      // cout<<endl;
+    }
+  }
       }
     }
     MPI_Barrier(MPI_COMM_WORLD);
@@ -98,21 +106,27 @@ main (int argc, char **argv)
   }
   if(rank!=0){
     MPI_Send(&sum,1,MPI_LONG_LONG,0,1,MPI_COMM_WORLD);
-    if(mark){
-      MPI_Send(&middle_value,1,MPI_LONG_LONG,0,1,MPI_COMM_WORLD);
-    }
+    // if(mark){
+    //   MPI_Send(&middle_value,1,MPI_LONG_LONG,0,1,MPI_COMM_WORLD);
+    // }
   }
   else{
     long long sum_received;
-    int mid_proc;
-    mid_proc=(!n/temp)?(p+temp)/2:(p-temp)/2-1;
+    // int mid_proc;
+    // mid_proc=(n/temp)?(p-temp)/2-1:(p+temp)/2;
     for(int i=1; i<p; i++){
       MPI_Recv(&sum_received,1,MPI_LONG_LONG,i,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
       sum+=sum_received;
     }
-    MPI_Recv(&middle_value,1,MPI_LONG_LONG,mid_proc,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+    // MPI_Recv(&middle_value,1,MPI_LONG_LONG,mid_proc,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
   }
   MPI_Barrier(MPI_COMM_WORLD);
+  if(mark && rank!=0){
+    MPI_Send(&middle_value,1,MPI_LONG_LONG,0,1,MPI_COMM_WORLD);
+  }
+  else if(rank==0){
+    MPI_Recv(&middle_value,1,MPI_LONG_LONG,MPI_Anysource,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+  }
   if(rank==0){
     int end_time = MPI_Wtime();
     std::cout << "Time : " << end_time-start_time << std::endl;
