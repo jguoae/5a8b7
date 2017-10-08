@@ -16,7 +16,7 @@ main (int argc, char **argv)
   MPI_Status status;
   MPI_Init (&argc, &argv);
   int rank,p,row,column,temp,side;
-  bool mark;
+  bool mark = 0;
   long long sum = 0,middle_value = 0;
   int n = atoi(argv[1]);
 
@@ -120,17 +120,17 @@ main (int argc, char **argv)
     // MPI_Recv(&middle_value,1,MPI_LONG_LONG,mid_proc,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
   }
   MPI_Barrier(MPI_COMM_WORLD);
-  // if(mark && rank!=0){
-  //   MPI_Send(&middle_value,1,MPI_LONG_LONG,0,1,MPI_COMM_WORLD);
-  // }
-  // else if(rank==0){
-  //   MPI_Recv(&middle_value,1,MPI_LONG_LONG,MPI_ANY_SOURCE,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
-  // }
+  if(mark && rank!=0){
+    MPI_Send(&middle_value,1,MPI_LONG_LONG,0,1,MPI_COMM_WORLD);
+  }
+  else if(rank==0 && p!=1){
+    MPI_Recv(&middle_value,1,MPI_LONG_LONG,MPI_ANY_SOURCE,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+  }
   if(rank==0){
     int end_time = MPI_Wtime();
     std::cout << "Time : " << end_time-start_time << std::endl;
     std::cout << "Sum : " << sum << std::endl;
-    // std::cout << "Middle value :" << middle_value << std::endl;
+    std::cout << "Middle value :" << middle_value << std::endl;
   }
 
   MPI_Finalize();
