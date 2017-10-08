@@ -38,7 +38,7 @@ main (int argc, char **argv)
   MPI_Barrier(MPI_COMM_WORLD);
   int start_time = MPI_Wtime();
 
-  //std::cout << "hello world" << p << std::endl;
+  std::cout << "hello world  " << p << std::endl;
 
   for(int m; m<9; m++){
     for(int p; p<side-1; p++){
