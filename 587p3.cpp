@@ -17,7 +17,7 @@ main (int argc, char **argv)
   MPI_Init (&argc, &argv);
   int rank,p,row,column,temp,side;
   bool mark;
-  long long sum,middle_value;
+  long long sum = 0,middle_value;
   int n = atoi(argv[1]);
 
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -117,7 +117,7 @@ main (int argc, char **argv)
     // }
   }
   else{
-    long long sum_received;
+    long long sum_received = 0;
     // int mid_proc;
     // mid_proc=(n/temp)?(p-temp)/2-1:(p+temp)/2;
     for(int i=1; i<p; i++){
