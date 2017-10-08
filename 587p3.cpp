@@ -37,7 +37,7 @@ main (int argc, char **argv)
 
   MPI_Barrier(MPI_COMM_WORLD);
   int start_time = MPI_Wtime();
-
+  std::cout << "hello world" << std::endl;
   for(int m; m<9; m++){
     for(int p; p<side-1; p++){
       B[p] = A[p][0];
@@ -72,7 +72,7 @@ main (int argc, char **argv)
         else{
           A[x][y] = f(A[x][y],A[x+1][y],A[x][y+1],A[x+1][y+1]);
         }
-      }
+      }PBS
     }
   }//itearationsmessage
 
@@ -104,9 +104,9 @@ main (int argc, char **argv)
   MPI_Barrier(MPI_COMM_WORLD);
   if(rank==0){
     int end_time = MPI_Wtime();
-    std::cout << "/*Time*/" << end_time-start_time << std::endl;
-    std::cout << "/* Sum */" << sum << std::endl;
-    std::cout << "/* Middle value */" << middle_value << std::endl;
+    std::cout << "Time : " << end_time-start_time << std::endl;
+    std::cout << "Sum : " << sum << std::endl;
+    std::cout << "Middle value :" << middle_value << std::endl;
   }
 
   MPI_Finalize();
