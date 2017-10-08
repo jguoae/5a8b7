@@ -31,8 +31,12 @@ main (int argc, char **argv)
   long long C [side+1];
   for(int i=0; i<side; i++){
       for(int j=0; j<side; j++){
-        A[i][j] = row*side+i+(column*side+j)*n;
-        // cout<<A[i][j];
+        if(row*side+i<n && column*side+j<n){
+          A[i][j] = row*side+i+(column*side+j)*n;
+        }
+        else{
+          A[i][j] = 0;
+        }// cout<<A[i][j];
       }
       // cout<<endl;
   } //init
