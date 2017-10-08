@@ -44,6 +44,7 @@ main (int argc, char **argv)
     for(int p; p<side-1; p++){
       B[p] = A[p][0];
     }
+
     if(column != 0){
       MPI_Send(&B,side,MPI_LONG_LONG,rank-1,1,MPI_COMM_WORLD);
     }
@@ -53,7 +54,7 @@ main (int argc, char **argv)
         A[q][side] = C[q];
       }
     }
-    std::cout << "hello world" << std::endl;
+    //std::cout << "hello world" << std::endl;
     if(row != 0){
       MPI_Send(&A[0],side,MPI_LONG_LONG,rank-temp,1,MPI_COMM_WORLD);
     }
@@ -61,10 +62,10 @@ main (int argc, char **argv)
       MPI_Recv(&A[side],side,MPI_LONG_LONG,rank+temp,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
     }
     if(row != 0 && column != 0){
-      MPI_Send(&A[0][0],1,MPI_LONG_LONG,rank-temp,1,MPI_COMM_WORLD);
+      MPI_Send(&A[0][0],1,MPI_LONG_LONG,rank-temp-1,1,MPI_COMM_WORLD);
     }
     if(row != temp-1 && column != temp-1){
-      MPI_Recv(&A[side][side],1,MPI_LONG_LONG,rank-temp,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+      MPI_Recv(&A[side][side],1,MPI_LONG_LONG,rank+temp+1,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
     }
     for(int x; x<side-1; x++){
       for(int y; y<side-1; y++){
@@ -98,11 +99,11 @@ main (int argc, char **argv)
     long long sum_received;
     int mid_proc;
     mid_proc=(!n/temp)?(p+temp)/2:(p-temp)/2-1;
-    MPI_Recv(&middle_value,1,MPI_LONG_LONG,mid_proc,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
     for(int i=1; i<p; i++){
       MPI_Recv(&sum_received,1,MPI_LONG_LONG,i,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
       sum+=sum_received;
     }
+    MPI_Recv(&middle_value,1,MPI_LONG_LONG,mid_proc,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
   }
   MPI_Barrier(MPI_COMM_WORLD);
   if(rank==0){
