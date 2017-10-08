@@ -32,26 +32,20 @@ main (int argc, char **argv)
   for(int i=0; i<side; i++){
       for(int j=0; j<side; j++){
         A[i][j] = row*side+i+(column*side+j)*n;
-        cout<<A[i][j]<<endl;
+        cout<<A[i][j];
       }
+      cout<<endl;
   } //init
 
   cout<<rank<<" "<<row<<" "<<column<<" "<<temp<<" "<<side<<" "<<p<<endl;
   MPI_Barrier(MPI_COMM_WORLD);
   int start_time = MPI_Wtime();
-  if(rank==0){
-    for(int i=0; i<side-1; i++){
-      for(int j=0; j<side-1; j++){
-        // cout<<A[i][j]<<" ";
-      }
-      // cout<<endl;
-    }
-  }
+
 
 
   for(int m=0; m<10; m++){
     if(rank==0){
-      //std::cout << "hello world  " << std::endl;
+      std::cout << "hello world  " << std::endl;
     }
     for(int p=0; p<side; p++){
       B[p] = A[p][0];
