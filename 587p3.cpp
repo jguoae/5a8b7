@@ -32,7 +32,7 @@ main (int argc, char **argv)
   for(int i=0; i<side; i++){
       for(int j=0; j<side; j++){
         A[i][j] = row*side+i+(column*side+j)*n;
-        cout<<A[i][j]<<end;;
+        cout<<A[i][j]<<endl;
       }
   } //init
 
