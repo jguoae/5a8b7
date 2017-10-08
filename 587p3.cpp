@@ -37,7 +37,7 @@ main (int argc, char **argv)
       // cout<<endl;
   } //init
 
-  cout<<rank<<" "<<row<<" "<<column<<" "<<temp<<" "<<side<<" "<<p<<endl;
+  // cout<<rank<<" "<<row<<" "<<column<<" "<<temp<<" "<<side<<" "<<p<<endl;
   MPI_Barrier(MPI_COMM_WORLD);
   int start_time = MPI_Wtime();
 
@@ -128,7 +128,7 @@ main (int argc, char **argv)
   }
   if(rank==0){
     int end_time = MPI_Wtime();
-    std::cout << "n : " << n << "#Proccessor :" << p << std::endl;
+    std::cout << "n : " << n << "  #Proccessor :" << p << std::endl;
     std::cout << "Time : " << end_time-start_time << std::endl;
     std::cout << "Sum : " << sum << std::endl;
     std::cout << "Middle value :" << middle_value << std::endl;
