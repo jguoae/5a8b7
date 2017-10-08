@@ -35,7 +35,7 @@ main (int argc, char **argv)
       }
   } //init
 
-  cout<<rank<<" "<<row<<" "<<column<<endl;
+  cout<<rank<<" "<<row<<" "<<column<<" "<<temp<<" "<<side<<" "<<size<<endl;
   MPI_Barrier(MPI_COMM_WORLD);
   int start_time = MPI_Wtime();
   if(rank==0){
