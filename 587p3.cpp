@@ -25,7 +25,7 @@ main (int argc, char **argv)
   temp = sqrt(p);
   row = rank/temp;
   column = rank%temp;
-  side = n/temp;
+  side = (n%temp) ? n/temp+1 : n/temp;
   long long A [side+1][side+1];
   long long B [side+1];
   long long C [side+1];
@@ -48,15 +48,15 @@ main (int argc, char **argv)
 
 
   for(int m=0; m<10; m++){
-    if(rank==1){
-      std::cout << "hello world  " << std::endl;
-      for(int i=0; i<side; i++){
-          for(int j=0; j<side; j++){
-            cout<<A[i][j]<<" ";
-          }
-          cout<<endl;
-      }
-    }
+    // if(rank==1){
+    //   std::cout << "hello world  " << std::endl;
+    //   for(int i=0; i<side; i++){
+    //       for(int j=0; j<side; j++){
+    //         cout<<A[i][j]<<" ";
+    //       }
+    //       cout<<endl;
+    //   }
+    // }
     for(int p=0; p<side; p++){
       B[p] = A[p][0];
     }
