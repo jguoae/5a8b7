@@ -125,7 +125,7 @@ main (int argc, char **argv)
     MPI_Send(&middle_value,1,MPI_LONG_LONG,0,1,MPI_COMM_WORLD);
   }
   else if(rank==0){
-    MPI_Recv(&middle_value,1,MPI_LONG_LONG,MPI_Anysource,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+    MPI_Recv(&middle_value,1,MPI_LONG_LONG,MPI_ANY_SOURCE,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
   }
   if(rank==0){
     int end_time = MPI_Wtime();
