@@ -26,9 +26,9 @@ main (int argc, char **argv)
   row = rank/temp;
   column = rank%temp;
   side = n/temp;
-  long long A [side][side];
-  long long B [side];
-  long long C [side];
+  long long A [side+1][side+1];
+  long long B [side+1];
+  long long C [side+1];
   for(int i; i<side-1; i++){
       for(int j; j<side-1; j++){
         A[i][j] = row*side+i+(column*side+j)*n;
@@ -38,7 +38,7 @@ main (int argc, char **argv)
   MPI_Barrier(MPI_COMM_WORLD);
   int start_time = MPI_Wtime();
 
-  std::cout << "hello world" << p << std::endl;
+  //std::cout << "hello world" << p << std::endl;
 
   for(int m; m<9; m++){
     for(int p; p<side-1; p++){
