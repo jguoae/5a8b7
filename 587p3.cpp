@@ -37,13 +37,15 @@ main (int argc, char **argv)
 
   MPI_Barrier(MPI_COMM_WORLD);
   int start_time = MPI_Wtime();
-
-  for(int i; i<side-1; i++){
-    for(int j; j<side-1; j++){
-      cout<<A[i][j];
+  if(rank==0){
+    for(int i; i<side-1; i++){
+      for(int j; j<side-1; j++){
+        cout<<A[i][j]<<" ";
+      }
+      cout<<endl;
     }
-    cout<<endl;
   }
+
 
   for(int m; m<9; m++){
     if(rank==0){
