@@ -92,15 +92,7 @@ main (int argc, char **argv)
         else if(column==temp-1 && y>=n-side*column-1){}
         else{
           A[x][y] = f(A[x][y],A[x+1][y],A[x][y+1],A[x+1][y+1]);
-        }    if(rank==1){
-      std::cout << "hello world  " << std::endl;
-      for(int i=0; i<side; i++){
-          for(int j=0; j<side; j++){
-            cout<<A[i][j]<<" ";
-          }
-          cout<<endl;
-      }
-    }
+        }
       }
     }
     MPI_Barrier(MPI_COMM_WORLD);
