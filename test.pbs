@@ -3,7 +3,7 @@
 #PBS -N test_out.txt
 #PBS -A eecs587-f17_flux
 #PBS -l qos=flux
-#PBS -l procs=4,walltime=0:5:0
+#PBS -l procs=16,walltime=0:5:0
 #PBS -l pmem=100mb
 #PBS -q flux
 #PBS -j oe
@@ -12,4 +12,4 @@ echo "I ran on:"
 cat $PBS_NODEFILE
 # Let PBS handle your output
 cd 5a8b7
-mpirun -n 4 ./587p3 1000
+mpirun -n 16 ./587p3 1000
