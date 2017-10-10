@@ -95,7 +95,7 @@ main (int argc, char **argv)
         }
       }
     }
-    MPI_Barrier(MPI_COMM_WORLD);
+    // MPI_Barrier(MPI_COMM_WORLD);
   }//itearations
 
   for(int i=0; i<side; i++){
@@ -123,7 +123,7 @@ main (int argc, char **argv)
     }
     // MPI_Recv(&middle_value,1,MPI_LONG_LONG,mid_proc,1,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
   }
-  MPI_Barrier(MPI_COMM_WORLD);
+  // MPI_Barrier(MPI_COMM_WORLD);
   if(mark && rank!=0){
     MPI_Send(&middle_value,1,MPI_LONG_LONG,0,1,MPI_COMM_WORLD);
   }
