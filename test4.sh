@@ -6,4 +6,4 @@
 # echo commands to stdout•set -x
 # run OpenMP program
 export OMP_NUM_THREADS=7
-./587p4.out
+./587p4bfs.out
