@@ -73,7 +73,7 @@ int main(){
         } else{
           result_c = g(c);
         }
-        if(gc!=0) {
+        if(gc!=-1000000) {
           result_d = gd;
         } else{
           result_d = g(d);
@@ -91,8 +91,8 @@ int main(){
         else{
           omp_set_lock(&lock);
           M=N;
-          dfs.push(new_node(c,mid_value,result_c,0));
-          dfs.push(new_node(mid_value,d,0,result_d));
+          dfs.push(new_node(c,mid_value,result_c,-1000000));
+          dfs.push(new_node(mid_value,d,-1000000,result_d));
           count--;
           omp_unset_lock(&lock);
         }
