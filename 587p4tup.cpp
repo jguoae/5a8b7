@@ -9,7 +9,7 @@ using namespace std;
 
 //parameters
 double a = 1;
-double b = 15;
+double b = 100;
 double epi = 0.000001;
 int s = 12;
 
