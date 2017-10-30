@@ -67,8 +67,17 @@ int main(){
         count++;
         dfs.pop();
         omp_unset_lock(&lock);
-        double result_c = (gc!=0) ? gc : g(c);
-        double result_d = (gd!=0) ? gc : g(d);
+        double result_c,result_d;
+        if(gc!=0) {
+          result_c = gc;
+        } else{
+          result_c = g(c);
+        }
+        if(gc!=0) {
+          result_d = gd;
+        } else{
+          result_d = g(d);
+        }
         double mid_value = (c+d)/2.0;
         N = max(N,result_c);
         N = max(N,result_d);
@@ -82,8 +91,8 @@ int main(){
         else{
           omp_set_lock(&lock);
           M=N;
-          dfs.push(new_node(c,mid_value,gc,0));
-          dfs.push(new_node(mid_value,d,0,gd));
+          dfs.push(new_node(c,mid_value,result_c,0));
+          dfs.push(new_node(mid_value,d,0,result_d));
           count--;
           omp_unset_lock(&lock);
         }
