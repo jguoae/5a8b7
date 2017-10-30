@@ -4,6 +4,7 @@
 #include <math.h>
 #include <omp.h>
 #include <stack>
+#include <queue>
 #include "g.h"
 using namespace std;
 
