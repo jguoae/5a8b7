@@ -7,7 +7,7 @@
 using namespace std;
 
 int static N = 1000;
-int static threadsPerBlock = 2000;
+int static threadsPerBlock = 1000;
 int static numberBlocks = N^2/threadsPerBlock;
 
 __global__ void median (double *a) {
