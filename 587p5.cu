@@ -6,9 +6,9 @@
 #include <algorithm>
 using namespace std;
 
-int static N = 1000;
-int static threadsPerBlock = 1000;
-int static numberBlocks = N^2/threadsPerBlock;
+#define N = 1000;
+#define threadsPerBlock = 1000;
+#define numberBlocks = N^2/threadsPerBlock;
 
 __global__ void median (double *a) {
   __shared__ double temp[N][N/numberBlocks+2];
@@ -28,7 +28,7 @@ __global__ void median (double *a) {
     tempCompare[2] = temp[lindexx+1][lindexy];
     tempCompare[3] = temp[lindexx][lindexy-1];
     tempCompare[4] = temp[lindexx][lindexy+1];
-    sort(begin(tempCompare),end(tempCompare));
+    std::sort(std::begin(tempCompare),std::end(tempCompare));
     a[gindexx][gindexy] == tempCompare[2];
   };
   __syncthreads();
@@ -46,16 +46,16 @@ __global__ void sum (double *sum, double *partSum) {
   }
 }
 
-__global__ void numassign (double *a, double *mid, double *spe) {
-    mid = a[N/2][N/2];
-    spe = a[17][31];
+__global__ void numassign (double *a, double *midNum, double *speNum) {
+    midNum = a[N/2][N/2];
+    speNum = a[17][31];
 }
 
-int main{
+int main(void){
   double A[N][N];
   double partSum[N];
   double *d_a, *d_partSum, *d_sum, *d_midNum, *d_speNum;
-  double sum, midNum, speNum;
+  double *sum, *midNum, *speNum;
   int size = N*N*sizeof(double);
   int partSize = N*sizeof(double);
   dim3 dimBlock(N, threadsPerBlock/N);
@@ -71,11 +71,11 @@ int main{
   cudaMalloc((void **)&d_sum, sizeof(double));
   cudaMalloc((void **)&d_speNum, sizeof(double));
   cudaMalloc((void **)&d_midNum, sizeof(double));
-  cudaMemcpy(d_a, &A, size, cudaMemcpyHostToDevice);
-  cudaMemcpy(d_partSum, &partSum, partSize, cudaMemcpyHostToDevice);
-  cudaMemcpy(d_sum, &sum, sizeof(double), cudaMemcpyHostToDevice);
-  cudaMemcpy(d_speNum, &speNum, sizeof(double), cudaMemcpyHostToDevice);
-  cudaMemcpy(d_midNum, &midNum, sizeof(double), cudaMemcpyHostToDevice);
+  cudaMemcpy(d_a, A, size, cudaMemcpyHostToDevice);
+  cudaMemcpy(d_partSum, partSum, partSize, cudaMemcpyHostToDevice);
+  cudaMemcpy(d_sum, sum, sizeof(double), cudaMemcpyHostToDevice);
+  cudaMemcpy(d_speNum, speNum, sizeof(double), cudaMemcpyHostToDevice);
+  cudaMemcpy(d_midNum, midNum, sizeof(double), cudaMemcpyHostToDevice);
   double startTime = clock();
 
   for(int i=0;i<10;i++){
@@ -86,16 +86,16 @@ int main{
   numassign<<<1,1>>>(d_a,d_midNum,d_speNum);
 
   double endTime = clock();
-  cudaMemcpy(&A, d_a, size, cudaMemcpyDeviceToHost);
-  cudaMemcpy(&partSum, d_partSum, partSize, cudaMemcpyDeviceToHost);
-  cudaMemcpy(&sum, d_sum, sizeof(double), cudaMemcpyDeviceToHost);
-  cudaMemcpy(&midNum, d_midNum, sizeof(double), cudaMemcpyDeviceToHost);
-  cudaMemcpy(&speNum, d_speNum, sizeof(double), cudaMemcpyDeviceToHost);
+  cudaMemcpy(A, d_a, size, cudaMemcpyDeviceToHost);
+  cudaMemcpy(partSum, d_partSum, partSize, cudaMemcpyDeviceToHost);
+  cudaMemcpy(sum, d_sum, sizeof(double), cudaMemcpyDeviceToHost);
+  cudaMemcpy(midNum, d_midNum, sizeof(double), cudaMemcpyDeviceToHost);
+  cudaMemcpy(speNum, d_speNum, sizeof(double), cudaMemcpyDeviceToHost);
   cudaFree(d_a);cudaFree(d_sum);cudaFree(d_speNum);cudaFree(d_midNum);cudaFree(d_partSum);
   cout<<"time: "<<endTime-startTime<<endl;
-  cout<<"Sum: "<<sum<<endl;
-  cout<<"A[n/2][n/2]: "<<midNum<<endl;
-  cout<<"A[17][31]: "<<speNum<<endl;
+  cout<<"Sum: "<<*sum<<endl;
+  cout<<"A[n/2][n/2]: "<<*midNum<<endl;
+  cout<<"A[17][31]: "<<*speNum<<endl;
 
   return 0;
 }
