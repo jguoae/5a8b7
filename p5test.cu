@@ -16,14 +16,14 @@ __global__ void median (double *a, double *b) {
   int number = blockIdx.x*blockDim.x + threadIdx.x;
 
   if(number > N-1 && number/N != 0 && number/N != N-1 && number < N^2-N){
-    double tempCompare[5];
-    tempCompare[0] = a[number];
-    tempCompare[1] = a[number-1];
-    tempCompare[2] = a[number+1];
-    tempCompare[3] = a[number-N];
-    tempCompare[4] = a[number+N];
+    // double tempCompare[5];
+    // tempCompare[0] = a[number];
+    // tempCompare[1] = a[number-1];
+    // tempCompare[2] = a[number+1];
+    // tempCompare[3] = a[number-N];
+    // tempCompare[4] = a[number+N];
     // sort(tempCompare.begin(),tempCompare.end());
-    b[number] = tempCompare[2];
+    // b[number] = tempCompare[2];
   }
   __syncthreads();
 }
