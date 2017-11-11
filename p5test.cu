@@ -7,27 +7,27 @@
 #include <vector>
 using namespace std;
 
-#define N = 1000;
-#define count = N^2;
-#define threadsPerBlock = 1000;
-#define numberBlocks = N^2/threadsPerBlock;
+#define N  1000;
+#define count  N^2;
+#define threadsPerBlock  1000;
+#define numberBlocks  N^2/threadsPerBlock;
 
 __global__ void median (double *a, double *b) {
   int number = blockIdx.x*blockDim.x + threadIdx.x;
 
-  if(number > 1 /*&& number/N != 0 && number/N != N-1 && number < N^2-N*/){
-    // double tempCompare[5];
-    // tempCompare[0] = a[number];
-    // tempCompare[1] = a[number-1];
-    // tempCompare[2] = a[number+1];
-    // tempCompare[3] = a[number-N];
-    // tempCompare[4] = a[number+N];
-    // sort(tempCompare.begin(),tempCompare.end());
-    // b[number] = tempCompare[2];
+  if(number > N-1 && number/N != 0 && number/N != N-1 && number < N^2-N){
+    double tempCompare[5];
+    tempCompare[0] = a[number];
+    tempCompare[1] = a[number-1];
+    tempCompare[2] = a[number+1];
+    tempCompare[3] = a[number-N];
+    tempCompare[4] = a[number+N];
+    sort(tempCompare.begin(),tempCompare.end());
+    b[number] = tempCompare[2];
   }
   __syncthreads();
 }
-/*
+
 __global__ void copy (double *b, double *a) {
   int number = blockIdx.x*blockDim.x + threadIdx.x;
   a[number] = b[number];
@@ -55,9 +55,9 @@ __global__ void sumGen (double *in, double *out) {
     out+=in[i];
   }
 }
-*/
+
 int main(){
-  /*
+
   double A[count];
   double B[count];
   double partSum[count/threadsPerBlock];
@@ -103,6 +103,6 @@ int main(){
   cout<<"Sum: "<<*sum<<endl;
   cout<<"A[n/2][n/2]: "<<A[N^2/2+N/2]<<endl;
   cout<<"A[17][31]: "<<A[17*N+31]<<endl;
-*/
+
   return 0;
 }
