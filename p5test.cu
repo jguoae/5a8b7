@@ -26,7 +26,7 @@ __global__ void median (double *a, double *b) {
   }
   __syncthreads();
 }
-
+/*
 __global__ void copy (double *b, double *a) {
   int number = blockIdx.x*blockDim.x + threadIdx.x;
   a[number] = b[number];
@@ -54,8 +54,9 @@ __global__ void sumGen (double *in, double *out) {
     out+=in[i];
   }
 }
-
+*/
 int main(void){
+  /*
   double A[count];
   double B[count];
   double partSum[count/threadsPerBlock];
@@ -79,7 +80,7 @@ int main(void){
   cudaMemcpy(d_a, A, size, cudaMemcpyHostToDevice);
   cudaMemcpy(d_b, B, size, cudaMemcpyHostToDevice);
   cudaMemcpy(d_partSum, partSum, size/threadsPerBlock, cudaMemcpyHostToDevice);
-  cudaMemcpy(d_ppartSum, ppartSum, sizethreadsPerBlock^2, cudaMemcpyHostToDevice);
+  cudaMemcpy(d_ppartSum, ppartSum, size/threadsPerBlock^2, cudaMemcpyHostToDevice);
   cudaMemcpy(d_sum, sum, sizeof(double), cudaMemcpyHostToDevice);
   double startTime = clock();
 
@@ -101,6 +102,6 @@ int main(void){
   cout<<"Sum: "<<*sum<<endl;
   cout<<"A[n/2][n/2]: "<<A[N^2/2+N/2]<<endl;
   cout<<"A[17][31]: "<<A[17*N+31]<<endl;
-
+*/
   return 0;
 }
