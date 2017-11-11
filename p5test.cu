@@ -7,10 +7,10 @@
 #include <vector>
 using namespace std;
 
-#define N 1000;
-#define count N^2;
-#define threadsPerBlock 1000;
-#define numberBlocks N^2/threadsPerBlock;
+#define N 1000
+#define count N^2
+#define threadsPerBlock 1000
+#define numberBlocks N^2/threadsPerBlock
 
 __global__ void median (double *a, double *b) {
   int number = blockIdx.x*blockDim.x + threadIdx.x;
@@ -60,9 +60,7 @@ int main(){
 
   double A[count];
   double B[count];
-  double partSum[count/threadsPerBlock];
-  double ppartSum[count/threadsPerBlock^2];
-  double sum[1];
+  double sum;
   double *d_a, *d_b, *d_partSum, *d_ppartSum, *d_sum;
   int size = N*N*sizeof(double);
 
@@ -91,7 +89,7 @@ int main(){
 
   double endTime = clock();
   cudaMemcpy(A, d_a, size, cudaMemcpyDeviceToHost);
-  cudaMemcpy(sum, d_sum, sizeof(double), cudaMemcpyDeviceToHost);
+  cudaMemcpy(&sum, d_sum, sizeof(double), cudaMemcpyDeviceToHost);
   cudaFree(d_a);cudaFree(d_b);cudaFree(d_partSum);cudaFree(d_ppartSum);cudaFree(d_sum);
 
   cout<<"time: "<<endTime-startTime<<endl;
