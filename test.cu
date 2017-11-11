@@ -30,7 +30,6 @@ add<<<N,1>>>(d_a, d_b, d_c);
 // Copy result back to host
 cudaMemcpy(c, d_c, size, cudaMemcpyDeviceToHost);
 // Cleanup
-free(a); free(b); free(c);
 cudaFree(d_a); cudaFree(d_b); cudaFree(d_c);
 return 0;
 

@@ -79,10 +79,6 @@ int main(){
   cudaMalloc((void **)&d_ppartSum, size/threadsPerBlock^2);
   cudaMalloc((void **)&d_sum, sizeof(double));
   cudaMemcpy(d_a, A, size, cudaMemcpyHostToDevice);
-  cudaMemcpy(d_b, B, size, cudaMemcpyHostToDevice);
-  cudaMemcpy(d_partSum, partSum, size/threadsPerBlock, cudaMemcpyHostToDevice);
-  cudaMemcpy(d_ppartSum, ppartSum, size/threadsPerBlock^2, cudaMemcpyHostToDevice);
-  cudaMemcpy(d_sum, sum, sizeof(double), cudaMemcpyHostToDevice);
   double startTime = clock();
 
   for(int i=0;i<10;i++){
@@ -95,7 +91,6 @@ int main(){
 
   double endTime = clock();
   cudaMemcpy(A, d_a, size, cudaMemcpyDeviceToHost);
-  cudaMemcpy(B, d_b, size, cudaMemcpyDeviceToHost);
   cudaMemcpy(sum, d_sum, sizeof(double), cudaMemcpyDeviceToHost);
   cudaFree(d_a);cudaFree(d_b);cudaFree(d_partSum);cudaFree(d_ppartSum);cudaFree(d_sum);
 
