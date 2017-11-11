@@ -1,3 +1,5 @@
+#include <math.h>
+
 
 #define N 512
 
