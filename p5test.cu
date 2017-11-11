@@ -29,7 +29,7 @@ int partition(int* input, int start, int end)
             input[end] = tmp;
         }
     }
-    return r;
+    return end;
 }
 
 int quickSelect(int* input, int p, int r, int k)
@@ -43,10 +43,10 @@ int quickSelect(int* input, int p, int r, int k)
       return input[j];
     }
     else if( k < length ){
-      return quick_select(input, p, j - 1, k);
+      return quickSelect(input, p, j - 1, k);
     }
     else{
-      return quick_select(input, j + 1, r, k - length);
+      return quickSelect(input, j + 1, r, k - length);
     }
 }
 
@@ -60,7 +60,7 @@ __global__ void median (double *a, double *b) {
     tempCompare[2] = a[number+1];
     tempCompare[3] = a[number-N];
     tempCompare[4] = a[number+N];
-    b[number] = quickSelect(tempcompare,0,4,2);
+    b[number] = quickSelect(tempCompare,0,4,2);
   }
   __syncthreads();
 }
