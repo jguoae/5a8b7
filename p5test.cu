@@ -14,7 +14,7 @@ using namespace std;
 __global__ void median (double *a, double *b) {
   int number = blockIdx.x*blockDim.x + threadIdx.x;
 
-  if (number >n-1 && number/N != 0 && number/N != N-1 && number<N^2-N){
+  if (number >N-1 && number/N != 0 && number/N != N-1 && number<N^2-N){
     double tempCompare[5];
     tempCompare[0] = a[number];
     tempCompare[1] = a[number-1];
@@ -56,12 +56,16 @@ __global__ void sumGen (double *in, double *out) {
 }
 
 int main(void){
-  double A[count], B[count], partSum[count/threadsPerBlock], ppartSum[count/threadsPerBlock^2],sum[1];
+  double A[count];
+  double B[count];
+  double partSum[count/threadsPerBlock];
+  double ppartSum[count/threadsPerBlock^2];
+  double sum[1];
   double *d_a, *d_b, *d_partSum, *d_ppartSum, *d_sum;
   int size = N*N*sizeof(double);
 
-  for(int i=0;i<n;i++){
-    for(int j=0;j<n;j++){
+  for(int i=0;i<N;i++){
+    for(int j=0;j<N;j++){
       A[i*N+j] = sin(i^2+j)^2+cos(i-j);
       B[i*N+j] = 0;
     }
