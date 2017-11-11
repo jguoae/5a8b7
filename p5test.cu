@@ -12,6 +12,44 @@ using namespace std;
 #define threadsPerBlock 1000
 #define numberBlocks N*N/threadsPerBlock
 
+int partition(int* input, int start, int end)
+{
+    int pivot = input[end];
+
+    while(start < end){
+        while(input[start] < pivot)
+            start++;
+        while (input[end] > pivot)
+            end--;
+        if (input[start] == input[end])
+            start++;
+        else if(start < end){
+            int tmp = input[start];
+            input[start] = input[end];
+            input[end] = tmp;
+        }
+    }
+    return r;
+}
+
+int quickSelect(int* input, int p, int r, int k)
+{
+    if(p == r){
+      return input[p];
+    }
+    int j = partition(input, p, r);
+    int length = j - p + 1;
+    if (length == k){
+      return input[j];
+    }
+    else if( k < length ){
+      return quick_select(input, p, j - 1, k);
+    }
+    else{
+      return quick_select(input, j + 1, r, k - length);
+    }
+}
+
 __global__ void median (double *a, double *b) {
   int number = blockIdx.x*blockDim.x + threadIdx.x;
 
@@ -22,8 +60,7 @@ __global__ void median (double *a, double *b) {
     tempCompare[2] = a[number+1];
     tempCompare[3] = a[number-N];
     tempCompare[4] = a[number+N];
-    sort(tempCompare.begin(),tempCompare.end());
-    b[number] = tempCompare[2];
+    b[number] = quickSelect(tempcompare,0,4,2);
   }
   __syncthreads();
 }
@@ -79,7 +116,7 @@ int main(){
 
   for(int i=0;i<10;i++){
       median<<<numberBlocks,threadsPerBlock>>>(d_a,d_b);
-      move<<numberBlocks,threadsPerBlock>>>(d_b,d_a);
+      move<<<numberBlocks,threadsPerBlock>>>(d_b,d_a);
   }
   reduction<<<count/threadsPerBlock, threadsPerBlock>>>(d_a,d_partSum);
   reduction<<<(count/threadsPerBlock*threadsPerBlock),(count/threadsPerBlock)>>>(d_partSum,d_ppartSum);
