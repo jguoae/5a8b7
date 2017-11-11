@@ -94,8 +94,8 @@ __global__ void sumGen (double *in, double *out) {
 }
 
 __global__ void assign (double *a, double *mid, double *spe) {
-  mid[0] = a[count/2+N/2];
-  spe[0] = a[17*N+31];
+  *mid = a[count/2+N/2];
+  *spe = a[17*N+31];
 }
 
 int main(){
@@ -116,18 +116,18 @@ int main(){
   cudaMalloc((void **)&d_partSum, size/threadsPerBlock);
   cudaMalloc((void **)&d_ppartSum, size/threadsPerBlock*threadsPerBlock);
   cudaMalloc((void **)&d_sum, sizeof(double));
-  cudaMemcpy(*d_a, *A, size, cudaMemcpyHostToDevice);
+  cudaMemcpy(d_a, A, size, cudaMemcpyHostToDevice);
   double startTime = clock();
 
   // for(int i=0;i<10;i++){
   //     median<<<numberBlocks,threadsPerBlock>>>(d_a,d_b);
   //     move<<<numberBlocks,threadsPerBlock>>>(d_b,d_a);
   // }
-  reduction<<<count/threadsPerBlock, threadsPerBlock>>>(d_a,d_partSum);
-  reduction<<<(count/threadsPerBlock*threadsPerBlock),(count/threadsPerBlock)>>>(d_partSum,d_ppartSum);
-  sumGen<<<1,1>>>(d_ppartSum,d_sum);
+  // reduction<<<count/threadsPerBlock, threadsPerBlock>>>(d_a,d_partSum);
+  // reduction<<<(count/threadsPerBlock*threadsPerBlock),(count/threadsPerBlock)>>>(d_partSum,d_ppartSum);
+  // sumGen<<<1,1>>>(d_ppartSum,d_sum);
   assign<<<1,1>>>(d_a, d_speNum, d_midNum);
-  cudaDeviceSynchronize();
+  // cudaDeviceSynchronize();
 
   double endTime = clock();
   cudaMemcpy(&sum, d_sum, sizeof(double), cudaMemcpyDeviceToHost);
