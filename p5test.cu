@@ -119,10 +119,10 @@ int main(){
   cudaMemcpy(d_a, A, size, cudaMemcpyHostToDevice);
   double startTime = clock();
 
-  for(int i=0;i<10;i++){
-      median<<<numberBlocks,threadsPerBlock>>>(d_a,d_b);
-      move<<<numberBlocks,threadsPerBlock>>>(d_b,d_a);
-  }
+  // for(int i=0;i<10;i++){
+  //     median<<<numberBlocks,threadsPerBlock>>>(d_a,d_b);
+  //     move<<<numberBlocks,threadsPerBlock>>>(d_b,d_a);
+  // }
   reduction<<<count/threadsPerBlock, threadsPerBlock>>>(d_a,d_partSum);
   reduction<<<(count/threadsPerBlock*threadsPerBlock),(count/threadsPerBlock)>>>(d_partSum,d_ppartSum);
   sumGen<<<1,1>>>(d_ppartSum,d_sum);
