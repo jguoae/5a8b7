@@ -4,6 +4,7 @@
 #include <math.h>
 #include <ctime>
 #include <algorithm>
+#include <vector>
 using namespace std;
 
 #define N = 1000;
@@ -21,7 +22,7 @@ __global__ void median (double *a, double *b) {
     tempCompare[2] = a[number+1];
     tempCompare[3] = a[number-N];
     tempCompare[4] = a[number+N];
-    std::sort(std::begin(tempCompare),std::end(tempCompare));
+    sort(tempCompare.begin(),tempCompare.end());
     b[number] = tempCompare[2];
   }
   __syncthreads();
