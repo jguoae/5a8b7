@@ -111,16 +111,18 @@ int main(){
   cudaMalloc((void **)&d_partSum, size/threadsPerBlock);
   cudaMalloc((void **)&d_ppartSum, size/threadsPerBlock*threadsPerBlock);
   cudaMalloc((void **)&d_sum, sizeof(double));
-  cudaMemcpy(d_b, A, size, cudaMemcpyHostToDevice);
+  cudaMemcpy(d_a, A, size, cudaMemcpyHostToDevice);
   double startTime = clock();
 
   for(int i=0;i<10;i++){
       median<<<numberBlocks,threadsPerBlock>>>(d_a,d_b);
+      cudaDeviceSynchronize();
       move<<<numberBlocks,threadsPerBlock>>>(d_b,d_a);
   }
   reduction<<<count/threadsPerBlock, threadsPerBlock>>>(d_a,d_partSum);
   reduction<<<(count/threadsPerBlock*threadsPerBlock),(count/threadsPerBlock)>>>(d_partSum,d_ppartSum);
   sumGen<<<1,1>>>(d_ppartSum,d_sum);
+  cudaDeviceSynchronize();
 
   double endTime = clock();
   cudaMemcpy(A, d_a, size, cudaMemcpyDeviceToHost);
