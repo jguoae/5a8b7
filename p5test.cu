@@ -111,10 +111,10 @@ int main(){
   cudaMalloc((void **)&d_partSum, size/threadsPerBlock);
   cudaMalloc((void **)&d_ppartSum, size/threadsPerBlock*threadsPerBlock);
   cudaMalloc((void **)&d_sum, sizeof(double));
-  cudaMemcpy(d_a, A, size, cudaMemcpyHostToDevice);
+  cudaMemcpy(d_b, A, size, cudaMemcpyHostToDevice);
   double startTime = clock();
 
-  for(int i=0;i<1;i++){
+  for(int i=0;i<10;i++){
       median<<<numberBlocks,threadsPerBlock>>>(d_a,d_b);
       move<<<numberBlocks,threadsPerBlock>>>(d_b,d_a);
   }
