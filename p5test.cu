@@ -8,14 +8,14 @@
 using namespace std;
 
 #define N 1000
-#define count N^2
+#define count N*N
 #define threadsPerBlock 1000
-#define numberBlocks N^2/threadsPerBlock
+#define numberBlocks N*N/threadsPerBlock
 
 __global__ void median (double *a, double *b) {
   int number = blockIdx.x*blockDim.x + threadIdx.x;
 
-  if((number > N-1) && (number/N != 0) && (number/N != N-1) && (number < N^2-N)){
+  if((number > N-1) && (number/N != 0) && (number/N != N-1) && (number < N*N-N)){
     double tempCompare[5];
     tempCompare[0] = a[number];
     tempCompare[1] = a[number-1];
@@ -28,12 +28,12 @@ __global__ void median (double *a, double *b) {
   __syncthreads();
 }
 
-__global__ void copy (double *b, double *a) {
+__global__ void move (double *b, double *a) {
   int number = blockIdx.x*blockDim.x + threadIdx.x;
   a[number] = b[number];
 }
 
-__global__ void sum (double *in, double *out) {
+__global__ void reduction (double *in, double *out) {
   __shared__ double temp[threadsPerBlock];
   int id = threadIdx.x;
   temp[id] = in[blockIdx.x*blockDim.x + id];
@@ -51,22 +51,21 @@ __global__ void sum (double *in, double *out) {
 }
 
 __global__ void sumGen (double *in, double *out) {
-  for(int i=0;i<(N/threadsPerBlock)^2;i++){
-    out+=in[i];
+  for(int i=0;i<(N/threadsPerBlock)*(N/threadsPerBlock);i++){
+    out[0]+=in[i];
   }
 }
 
 int main(){
 
   double A[count];
-  double B[count];
   double sum;
   double *d_a, *d_b, *d_partSum, *d_ppartSum, *d_sum;
   int size = N*N*sizeof(double);
 
   for(int i=0;i<N;i++){
     for(int j=0;j<N;j++){
-      A[i*N+j] = sin(i^2+j)^2+cos(i-j);
+      A[i*N+j] = sin(i*i+j)*sin(i*i+j)+cos(i-j);
       B[i*N+j] = 0;
     }
   }
@@ -74,17 +73,17 @@ int main(){
   cudaMalloc((void **)&d_a, size);
   cudaMalloc((void **)&d_b, size);
   cudaMalloc((void **)&d_partSum, size/threadsPerBlock);
-  cudaMalloc((void **)&d_ppartSum, size/threadsPerBlock^2);
+  cudaMalloc((void **)&d_ppartSum, size/threadsPerBlock*threadsPerBlock);
   cudaMalloc((void **)&d_sum, sizeof(double));
   cudaMemcpy(d_a, A, size, cudaMemcpyHostToDevice);
   double startTime = clock();
 
   for(int i=0;i<10;i++){
       median<<<numberBlocks,threadsPerBlock>>>(d_a,d_b);
-      copy<<numberBlocks,threadsPerBlock>>>(d_b,d_a);
+      move<<numberBlocks,threadsPerBlock>>>(d_b,d_a);
   }
-  sum<<<N^2/threadsPerBlock, threadsPerBlock>>>(d_a,d_partSum);
-  sum<<<N^2/threadsPerBlock^2,N^2/threadsPerBlock>>>(d_partSum,d_ppartSum);
+  reduction<<<count/threadsPerBlock, threadsPerBlock>>>(d_a,d_partSum);
+  reduction<<<(count/threadsPerBlock*threadsPerBlock),(count/threadsPerBlock)>>>(d_partSum,d_ppartSum);
   sumGen<<<1,1>>>(d_ppartSum,d_sum);
 
   double endTime = clock();
@@ -94,7 +93,7 @@ int main(){
 
   cout<<"time: "<<endTime-startTime<<endl;
   cout<<"Sum: "<<*sum<<endl;
-  cout<<"A[n/2][n/2]: "<<A[N^2/2+N/2]<<endl;
+  cout<<"A[n/2][n/2]: "<<A[count/2+N/2]<<endl;
   cout<<"A[17][31]: "<<A[17*N+31]<<endl;
 
   return 0;
