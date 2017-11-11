@@ -94,8 +94,8 @@ __global__ void sumGen (double *in, double *out) {
 }
 
 __global__ void assign (double *a, double *mid, double *spe) {
-  mid = a[count/2+N/2];
-  spe = a[17*N+31];
+  mid[0] = a[count/2+N/2];
+  spe[0] = a[17*N+31];
 }
 
 int main(){
