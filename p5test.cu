@@ -125,7 +125,7 @@ int main(){
   cudaDeviceSynchronize();
 
   double endTime = clock();
-  cudaMemcpy(A, d_a, size, cudaMemcpyDeviceToHost);
+  cudaMemcpy(A, d_b, size, cudaMemcpyDeviceToHost);
   cudaMemcpy(&sum, d_sum, sizeof(double), cudaMemcpyDeviceToHost);
   cudaFree(d_a);cudaFree(d_b);cudaFree(d_partSum);cudaFree(d_ppartSum);cudaFree(d_sum);
 
