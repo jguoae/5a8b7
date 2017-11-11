@@ -12,9 +12,9 @@ using namespace std;
 #define threadsPerBlock 1000
 #define numberBlocks N*N/threadsPerBlock
 
-int partition(int* input, int start, int end)
+int partition(double* input, int start, int end)
 {
-    int pivot = input[end];
+    double pivot = input[end];
 
     while(start < end){
         while(input[start] < pivot)
@@ -32,7 +32,7 @@ int partition(int* input, int start, int end)
     return end;
 }
 
-int quickSelect(int* input, int p, int r, int k)
+int quickSelect(double* input, int p, int r, int k)
 {
     if(p == r){
       return input[p];
