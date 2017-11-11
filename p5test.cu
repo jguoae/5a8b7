@@ -14,7 +14,7 @@ using namespace std;
 __global__ void median (double *a, double *b) {
   int number = blockIdx.x*blockDim.x + threadIdx.x;
 
-  if (number >N-1 && number/N != 0 && number/N != N-1 && number<N^2-N){
+  if(number > N-1 && number/N != 0 && number/N != N-1 && number < N^2-N){
     double tempCompare[5];
     tempCompare[0] = a[number];
     tempCompare[1] = a[number-1];
