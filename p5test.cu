@@ -66,7 +66,6 @@ int main(){
   for(int i=0;i<N;i++){
     for(int j=0;j<N;j++){
       A[i*N+j] = sin(i*i+j)*sin(i*i+j)+cos(i-j);
-      B[i*N+j] = 0;
     }
   }
 
@@ -92,7 +91,7 @@ int main(){
   cudaFree(d_a);cudaFree(d_b);cudaFree(d_partSum);cudaFree(d_ppartSum);cudaFree(d_sum);
 
   cout<<"time: "<<endTime-startTime<<endl;
-  cout<<"Sum: "<<*sum<<endl;
+  cout<<"Sum: "<<sum<<endl;
   cout<<"A[n/2][n/2]: "<<A[count/2+N/2]<<endl;
   cout<<"A[17][31]: "<<A[17*N+31]<<endl;
 
