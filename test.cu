@@ -19,8 +19,6 @@ cudaMalloc((void **)&d_c, size);
 a = 2;
 b = 7;
 
-© NVIDIA Corporation 2011
-Addition on the Device: main()
 
 // Copy inputs to device
 cudaMemcpy(d_a, &a, size, cudaMemcpyHostToDevice);
