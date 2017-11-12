@@ -104,6 +104,7 @@ int main(){
   double sum, speNum[2];
   double *d_a, *d_b, *d_partSum, *d_ppartSum, *d_sum, *d_speNum;
   int size = N*N*sizeof(double);
+  int twosize = 2*sizeof(double);
 
   for(int i=0;i<N;i++){
     for(int j=0;j<N;j++){
@@ -117,7 +118,7 @@ int main(){
   cudaMalloc((void **)&d_partSum, size/threadsPerBlock);
   cudaMalloc((void **)&d_ppartSum, size/threadsPerBlock*threadsPerBlock);
   cudaMalloc((void **)&d_sum, sizeof(double));
-  cudaMalloc((void **)&d_speNum,2*sizeof(double));
+  cudaMalloc((void **)&d_speNum,twosize);
   cudaMemcpy(d_a, A, size, cudaMemcpyHostToDevice);
   double startTime = clock();
 
@@ -133,7 +134,7 @@ int main(){
 
   double endTime = clock();
   cudaMemcpy(&sum, d_sum, sizeof(double), cudaMemcpyDeviceToHost);
-  cudaMemcpy(speNum, d_speNum, sizeof(double), cudaMemcpyDeviceToHost);
+  cudaMemcpy(speNum, d_speNum, twosize, cudaMemcpyDeviceToHost);
   cudaMemcpy(B, d_a, size, cudaMemcpyDeviceToHost);
   cudaFree(d_a);cudaFree(d_b);cudaFree(d_partSum);cudaFree(d_ppartSum);cudaFree(d_sum);cudaFree(d_speNum);
 
