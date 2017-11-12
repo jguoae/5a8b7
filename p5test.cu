@@ -7,7 +7,7 @@
 #include <vector>
 using namespace std;
 
-#define N 2000
+#define N 1000
 #define count N*N
 #define threadsPerBlock 512
 #define numberBlocks N*N/threadsPerBlock
@@ -60,6 +60,7 @@ __global__ void median (double *a) {
     tempCompare[2] = a[number+1];
     tempCompare[3] = a[number-N];
     tempCompare[4] = a[number+N];
+    _syncthreads();
     a[number] = quickSelect(tempCompare,0,4,2);
     // a[number] = tempCompare[2];
   }
@@ -139,7 +140,7 @@ int main(){
   cudaMemcpy(B, d_a, size, cudaMemcpyDeviceToHost);
   cudaFree(d_a);cudaFree(d_partSum);cudaFree(d_ppartSum);cudaFree(d_sum);cudaFree(d_speNum);
 
-  cout<<"time: "<<endTime-startTime<<endl;
+  cout<<"time: "<<(endTime-startTime)*1000/CLOCKS_PER_SEC<<endl;
   cout<<"Sum: "<<sum[0]<<endl;
   cout<<"A[n/2][n/2]: "<<speNum[0]<<"    "<<A[count/2+N/2]<<"    "<<B[count/2+N/2]<<endl;
   cout<<"A[17][31]: "<<speNum[1]<<"    "<<A[17*N+31]<<"    "<<B[17*N+31]<<endl;
