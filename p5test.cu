@@ -92,7 +92,7 @@ __global__ void reduction (double *in, double *out) {
   int id = threadIdx.x;
   temp[id] = in[blockIdx.x*blockDim.x + id];
   __syncthreads();
-  if(id<512 && id>11){
+  if(id<500 && id>11){
     temp[id] += temp[id+500]; __syncthreads();
   }
   __syncthreads();
@@ -123,7 +123,7 @@ __global__ void reduction (double *in, double *out) {
   if(id<1){
     temp[id] += temp[id+1]; __syncthreads();
   }
-  if(id<1){out[blockIdx.x] = temp[0];}
+  if(id<1){out[blockIdx.x] = temp[id];}
 }
 
 __global__ void sumGen (double *in, double *out) {
