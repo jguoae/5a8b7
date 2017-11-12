@@ -50,7 +50,15 @@ __device__ double quickSelect(double* input, int p, int r, int k){
 }
 
 __device__ void sort(double* input){
-
+  for(int i=0;i<5;i++){
+    for(int j=i;j<5;j++){
+      if(input[j]<input[i]){
+        int new_temp = input[i];
+        input[i] = input[j];
+        input[j] = new_temp;
+      }
+    }
+  }
 }
 
 __global__ void median (double *a, double *b) {
@@ -66,7 +74,7 @@ __global__ void median (double *a, double *b) {
     __syncthreads();
     // b[number] = quickSelect(tempCompare,0,4,2);
     // a[number] = tempCompare[2];
-    sort(tempCompare,tempCompare+sizeof(tempCompare)/sizeof(tempCompare[0]));
+    sort(tempCompare);
     b[number]=tempCompare[2];
   }
   else{
