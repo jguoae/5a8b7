@@ -46,11 +46,11 @@ __device__ double quickSelect(double* input, int p, int r, int k)
       return quickSelect(input, p, j - 1, k);
     }
     else{
-      return quickSelect(input, j + 1, r, k - length);
+      return quickSelect(i_syncthreads();nput, j + 1, r, k - length);
     }
 }
 
-__global__ void median (double *a) {
+__global__ void median (double *a, double *b) {
   int number = blockIdx.x*blockDim.x + threadIdx.x;
 
   if((number > N-1) && (number/N != 0) && (number/N != N-1) && (number < N*N-N)){
@@ -61,16 +61,18 @@ __global__ void median (double *a) {
     tempCompare[3] = a[number-N];
     tempCompare[4] = a[number+N];
     __syncthreads();
-    a[number] = quickSelect(tempCompare,0,4,2);
+    b[number] = quickSelect(tempCompare,0,4,2);
     // a[number] = tempCompare[2];
   }
-  __syncthreads();
+  else{
+    b[number]=a[number];
+  }
 }
 
-// __global__ void move (double *b, double *a) {
-//   int number = blockIdx.x*blockDim.x + threadIdx.x;
-//   a[number] = b[number];
-// }
+__global__ void move (double *b, double *a) {
+  int number = blockIdx.x*blockDim.x + threadIdx.x;
+  a[number] = b[number];
+}
 
 __global__ void reduction (double *in, double *out) {
   __shared__ double temp[threadsPerBlock];
@@ -116,7 +118,7 @@ int main(){
     }
   }
   cudaMalloc((void **)&d_a, size);
-  // cudaMalloc((void **)&d_b, size);
+  cudaMalloc((void **)&d_b, size);
   cudaMalloc((void **)&d_partSum, size/threadsPerBlock);
   cudaMalloc((void **)&d_ppartSum, size/threadsPerBlock/threadsPerBlock);
   cudaMalloc((void **)&d_sum, sizeof(double));
@@ -125,8 +127,10 @@ int main(){
   double startTime = clock();
 
   for(int i=0;i<10;i++){
-      median<<<numberBlocks,threadsPerBlock>>>(d_a);
-      //move<<<numberBlocks,threadsPerBlock>>>(d_b,d_a);
+      median<<<numberBlocks,threadsPerBlock>>>(d_a,d_b);
+      cudaDeviceSynchronize();
+      move<<<numberBlocks,threadsPerBlock>>>(d_b,d_a);
+      cudaDeviceSynchronize();
   }
   reduction<<<count/threadsPerBlock, threadsPerBlock>>>(d_a,d_partSum);
   reduction<<<(count/threadsPerBlock/threadsPerBlock),threadsPerBlock>>>(d_partSum,d_ppartSum);
@@ -138,7 +142,9 @@ int main(){
   cudaMemcpy(sum, d_sum, sizeof(double), cudaMemcpyDeviceToHost);
   cudaMemcpy(speNum, d_speNum, twosize, cudaMemcpyDeviceToHost);
   cudaMemcpy(B, d_a, size, cudaMemcpyDeviceToHost);
-  cudaFree(d_a);cudaFree(d_partSum);cudaFree(d_ppartSum);cudaFree(d_sum);cudaFree(d_speNum);
+  cudaFree(d_a);cudaFree(d_b);cudaFree(d_partSum);cudaFree(d_ppartSum);cudaFree(d_sum);cudaFree(d_speNum);
+
+  cout.precision(10);
 
   cout<<"time: "<<(endTime-startTime)*1000/CLOCKS_PER_SEC<<endl;
   cout<<"Sum: "<<sum[0]<<endl;
