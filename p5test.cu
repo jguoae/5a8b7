@@ -138,7 +138,7 @@ int main(){
   double A[count], B[count];
   double sum[1], speNum[2];
   double *d_a, *d_b, *d_partSum, *d_ppartSum, *d_sum, *d_speNum;
-  int size = N*N*sizeo  // if(id<256){f(double);
+  int size = N*N*sizeof(double);
   int twosize = 2*sizeof(double);
 
   sum[0]=0;
