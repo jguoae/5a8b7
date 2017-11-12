@@ -123,7 +123,7 @@ int main(){
   cudaMemcpy(d_a, A, size, cudaMemcpyHostToDevice);
   double startTime = clock();
 
-  for(int i=0;i<1;i++){
+  for(int i=0;i<10;i++){
       median<<<numberBlocks,threadsPerBlock>>>(d_a);
       //move<<<numberBlocks,threadsPerBlock>>>(d_b,d_a);
   }
