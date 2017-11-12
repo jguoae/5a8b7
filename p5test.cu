@@ -123,7 +123,7 @@ __global__ void reduction (double *in, double *out) {
   if(id<1){
     temp[id] += temp[id+1]; __syncthreads();
   }
-  if(id<1){out[blockIdx.x] = temp[id];}
+  if(id<1){out[blockIdx.x] = temp[0];}
 }
 
 __global__ void sumGen (double *in, double *out) {
