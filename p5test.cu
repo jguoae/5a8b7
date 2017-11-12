@@ -100,7 +100,6 @@ __global__ void assign (double *a, double *spe) {
 }
 
 int main(){
-
   double A[count], B[count];
   double sum[1], speNum[2];
   double *d_a, *d_b, *d_partSum, *d_ppartSum, *d_sum, *d_speNum;
@@ -117,7 +116,7 @@ int main(){
   cudaMalloc((void **)&d_a, size);
   cudaMalloc((void **)&d_b, size);
   cudaMalloc((void **)&d_partSum, size/threadsPerBlock);
-  cudaMalloc((void **)&d_ppartSum, size/threadsPerBlock*threadsPerBlock);
+  cudaMalloc((void **)&d_ppartSum, size/threadsPerBlock/threadsPerBlock);
   cudaMalloc((void **)&d_sum, sizeof(double));
   cudaMalloc((void **)&d_speNum,twosize);
   cudaMemcpy(d_a, A, size, cudaMemcpyHostToDevice);
