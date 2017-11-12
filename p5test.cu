@@ -47,7 +47,7 @@ __device__ double quickSelect(double* input, int p, int r, int k)
     }
     else{
       return quickSelect(input, j + 1, r, k - length);
-    }
+    }sum
 }
 
 __global__ void median (double *a) {
@@ -66,10 +66,10 @@ __global__ void median (double *a) {
   __syncthreads();
 }
 
-__global__ void move (double *b, double *a) {
-  int number = blockIdx.x*blockDim.x + threadIdx.x;
-  a[number] = b[number];
-}
+// __global__ void move (double *b, double *a) {
+//   int number = blockIdx.x*blockDim.x + threadIdx.x;
+//   a[number] = b[number];
+// }
 
 __global__ void reduction (double *in, double *out) {
   __shared__ double temp[threadsPerBlock];
@@ -102,9 +102,11 @@ __global__ void assign (double *a, double *spe) {
 int main(){
   double A[count], B[count];
   double sum[1], speNum[2];
-  double *d_a, *d_b, *d_partSum, *d_ppartSum, *d_sum, *d_speNum;
+  double *d_a, *d_partSum, *d_ppartSum, *d_sum, *d_speNum;
   int size = N*N*sizeof(double);
   int twosize = 2*sizeof(double);
+
+  sum[0]=0;
 
   for(int i=0;i<N;i++){
     for(int j=0;j<N;j++){
@@ -114,7 +116,7 @@ int main(){
   }
 
   cudaMalloc((void **)&d_a, size);
-  cudaMalloc((void **)&d_b, size);
+  // cudaMalloc((void **)&d_b, size);
   cudaMalloc((void **)&d_partSum, size/threadsPerBlock);
   cudaMalloc((void **)&d_ppartSum, size/threadsPerBlock/threadsPerBlock);
   cudaMalloc((void **)&d_sum, sizeof(double));
@@ -127,7 +129,7 @@ int main(){
       //move<<<numberBlocks,threadsPerBlock>>>(d_b,d_a);
   }
   reduction<<<count/threadsPerBlock, threadsPerBlock>>>(d_a,d_partSum);
-  reduction<<<(count/threadsPerBlock/threadsPerBlock),(count/threadsPerBlock)>>>(d_partSum,d_ppartSum);
+  reduction<<<(count/threadsPerBlock/threadsPerBlock),threadsPerBlock>>>(d_partSum,d_ppartSum);
   sumGen<<<1,1>>>(d_ppartSum,d_sum);
   assign<<<1,1>>>(d_a, d_speNum);
   // cudaDeviceSynchronize();
