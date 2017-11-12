@@ -88,14 +88,19 @@ __global__ void move (double *b, double *a) {
 }
 
 __global__ void reduction (double *in, double *out) {
-  __shared__ double temp[threadsPerBlock];
+  __shared__ double temp[1024];
   int id = threadIdx.x;
   temp[id] = in[blockIdx.x*blockDim.x + id];
   __syncthreads();
-  if(id<500 && id>11){
-    temp[id] += temp[id+500]; __syncthreads();
+  if(id==0){
+    for(int i=1000;i<1024;i++){
+      temp[i] = 0;
+    }
   }
   __syncthreads();
+  if(id<512){
+    temp[id] += temp[id+500]; __syncthreads();
+  }
   if(id<256){
     temp[id] += temp[id+256]; __syncthreads();
   }
@@ -160,7 +165,7 @@ int main(){
   cudaMalloc((void **)&d_speNum,twosize);
   cudaMemcpy(d_a, A, size, cudaMemcpyHostToDevice);
   cudaMemcpy(d_sum, sum, sizeof(double), cudaMemcpyHostToDevice);
-  double startTime = clock();
+  int startTime = clock();
 
   for(int i=0;i<10;i++){
       median<<<numberBlocks,threadsPerBlock>>>(d_a,d_b);
@@ -174,7 +179,7 @@ int main(){
   assign<<<1,1>>>(d_a, d_speNum);
   cudaDeviceSynchronize();
 
-  double endTime = clock();
+  int endTime = clock();
   cudaMemcpy(sum, d_sum, sizeof(double), cudaMemcpyDeviceToHost);
   cudaMemcpy(speNum, d_speNum, twosize, cudaMemcpyDeviceToHost);
   cudaMemcpy(B, d_a, size, cudaMemcpyDeviceToHost);
