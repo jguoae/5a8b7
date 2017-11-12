@@ -121,6 +121,7 @@ __global__ void reduction (double *in, double *out) {
     temp[id] += temp[id+1]; __syncthreads();
   }
   if(id<1){out[blockIdx.x] = temp[0];}
+  cudaFree(temp);
 }
 
 __global__ void sumGen (double *in, double *out) {
@@ -175,8 +176,7 @@ int main(){
   cudaMemcpy(speNum, d_speNum, twosize, cudaMemcpyDeviceToHost);
   cudaMemcpy(B, d_a, size, cudaMemcpyDeviceToHost);
   cudaFree(d_a);cudaFree(d_b);cudaFree(d_partSum);cudaFree(d_ppartSum);cudaFree(d_sum);cudaFree(d_speNum);
-
-  cout.precision(10);
+  cout.precision(8);
 
   cout<<"time: "<<(endTime-startTime)*1000/CLOCKS_PER_SEC<<endl;
   cout<<"Sum: "<<sum[0]<<endl;
