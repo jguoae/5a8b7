@@ -91,34 +91,35 @@ __global__ void reduction (double *in, double *out) {
   __shared__ double temp[threadsPerBlock];
   int id = threadIdx.x;
   temp[id] = in[blockIdx.x*blockDim.x + id];
+  __syncthreads();
   if(id<500 && id>11){ temp[id] += temp[id+500]; __syncthreads();}
-  // if(id<256){
-     temp[id] += temp[id+256]; __syncthreads();
-  //  }
-  // if(id<128){
+  if(id<256){
+    temp[id] += temp[id+256]; __syncthreads();
+  }
+  if(id<128){
     temp[id] += temp[id+128]; __syncthreads();
-  // }
-  // if(id<64){
+  }
+  if(id<64){
     temp[id] += temp[id+64]; __syncthreads();
-  // }
-  // if(id<32){
+  }
+  if(id<32){
     temp[id] += temp[id+32]; __syncthreads();
-  // }
-  // if(id<16){
+  }
+  if(id<16){
     temp[id] += temp[id+16]; __syncthreads();
-  // }
-  // if(id<8){
+  }
+  if(id<8){
     temp[id] += temp[id+8]; __syncthreads();
-  // }
-  // if(id<4){
+  }
+  if(id<4){
     temp[id] += temp[id+4]; __syncthreads();
-  // }
-  // if(id<2){
+  }
+  if(id<2){
     temp[id] += temp[id+2]; __syncthreads();
-  // }
-  // if(id<1){
+  }
+  if(id<1){
     temp[id] += temp[id+1]; __syncthreads();
-  // }
+  }
   if(id<1){out[blockIdx.x] = temp[0];}
 }
 
@@ -137,7 +138,7 @@ int main(){
   double A[count], B[count];
   double sum[1], speNum[2];
   double *d_a, *d_b, *d_partSum, *d_ppartSum, *d_sum, *d_speNum;
-  int size = N*N*sizeof(double);
+  int size = N*N*sizeo  // if(id<256){f(double);
   int twosize = 2*sizeof(double);
 
   sum[0]=0;
