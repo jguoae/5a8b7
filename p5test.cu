@@ -93,7 +93,7 @@ __global__ void reduction (double *in, double *out) {
   temp[id] = in[blockIdx.x*blockDim.x + id];
   __syncthreads();
   if(id<512 && id>11){
-    temp[id] += temp[id+512]; __syncthreads();
+    temp[id] += temp[id+500]; __syncthreads();
   }
   __syncthreads();
   if(id<256){
