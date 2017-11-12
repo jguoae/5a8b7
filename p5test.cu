@@ -123,7 +123,7 @@ int main(){
   double startTime = clock();
 
   for(int i=0;i<1;i++){
-      median<<<numberBlocks,threadsPerBlock>>>(d_a);
+      // median<<<numberBlocks,threadsPerBlock>>>(d_a);
       //move<<<numberBlocks,threadsPerBlock>>>(d_b,d_a);
   }
   // reduction<<<count/threadsPerBlock, threadsPerBlock>>>(d_a,d_partSum);
