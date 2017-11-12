@@ -92,7 +92,9 @@ __global__ void reduction (double *in, double *out) {
   int id = threadIdx.x;
   temp[id] = in[blockIdx.x*blockDim.x + id];
   __syncthreads();
-  if(id<500 && id>11){ temp[id] += temp[id+500]; __syncthreads();}
+  if(id<500 && id>11){
+    temp[id] += temp[id+500]; __syncthreads();
+  }
   if(id<256){
     temp[id] += temp[id+256]; __syncthreads();
   }
@@ -156,6 +158,7 @@ int main(){
   cudaMalloc((void **)&d_sum, sizeof(double));
   cudaMalloc((void **)&d_speNum,twosize);
   cudaMemcpy(d_a, A, size, cudaMemcpyHostToDevice);
+  cudaMemcpy(d_sum, sum, sizeof(double), cudaMemcpyHostToDevice);
   double startTime = clock();
 
   for(int i=0;i<10;i++){
