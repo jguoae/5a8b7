@@ -114,7 +114,6 @@ int main(){
       B[i*N+j] = 0;
     }
   }
-(i2i2
   cudaMalloc((void **)&d_a, size);
   // cudaMalloc((void **)&d_b, size);
   cudaMalloc((void **)&d_partSum, size/threadsPerBlock);
