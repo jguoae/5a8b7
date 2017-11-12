@@ -100,7 +100,7 @@ __global__ void assign (double *a, double *spe) {
 
 int main(){
 
-  double A[count];
+  double A[count], B[count];
   double sum, speNum[2];
   double *d_a, *d_b, *d_partSum, *d_ppartSum, *d_sum, *d_speNum;
   int size = N*N*sizeof(double);
@@ -108,6 +108,7 @@ int main(){
   for(int i=0;i<N;i++){
     for(int j=0;j<N;j++){
       A[i*N+j] = sin(i*i+j)*sin(i*i+j)+cos(i-j);
+      B[i*N+j] = 0;
     }
   }
 
@@ -116,7 +117,7 @@ int main(){
   cudaMalloc((void **)&d_partSum, size/threadsPerBlock);
   cudaMalloc((void **)&d_ppartSum, size/threadsPerBlock*threadsPerBlock);
   cudaMalloc((void **)&d_sum, sizeof(double));
-  cudaMalloc((void **)&d_speNum,3*sizeof(double));
+  cudaMalloc((void **)&d_speNum,2*sizeof(double));
   cudaMemcpy(d_a, A, size, cudaMemcpyHostToDevice);
   double startTime = clock();
 
@@ -133,12 +134,13 @@ int main(){
   double endTime = clock();
   cudaMemcpy(&sum, d_sum, sizeof(double), cudaMemcpyDeviceToHost);
   cudaMemcpy(speNum, d_speNum, sizeof(double), cudaMemcpyDeviceToHost);
+  cudaMemcpy(B, d_a, size, cudaMemcpyDeviceToHost);
   cudaFree(d_a);cudaFree(d_b);cudaFree(d_partSum);cudaFree(d_ppartSum);cudaFree(d_sum);cudaFree(d_speNum);
 
   cout<<"time: "<<endTime-startTime<<endl;
   cout<<"Sum: "<<sum<<endl;
-  cout<<"A[n/2][n/2]: "<<speNum[0]<<"    "<<A[count/2+N/2]<<endl;
-  cout<<"A[17][31]: "<<speNum[1]<<"    "<<A[17*N+31]<<endl;
+  cout<<"A[n/2][n/2]: "<<speNum[0]<<"    "<<A[count/2+N/2]<<"    "<<A[count/2+N/2]<<endl;
+  cout<<"A[17][31]: "<<speNum[1]<<"    "<<A[17*N+31]<<"    "<<B[17*N+31]<<endl;
 
   return 0;
 }
