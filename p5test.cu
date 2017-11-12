@@ -77,7 +77,7 @@ __global__ void reduction (double *in, double *out) {
   temp[id] = in[blockIdx.x*blockDim.x + id];
   if(id<500 && id>11){ temp[id] += temp[id+500]; __syncthreads();}
   if(id<256){ temp[id] += temp[id+256]; __syncthreads();}
-  if(id<128){ temp[id]i2 += temp[id+128]; __syncthreads();}
+  if(id<128){ temp[id] += temp[id+128]; __syncthreads();}
   if(id<64){ temp[id] += temp[id+64]; __syncthreads();}
   if(id<32){ temp[id] += temp[id+32]; __syncthreads();}
   if(id<16){ temp[id] += temp[id+16]; __syncthreads();}
@@ -128,7 +128,7 @@ int main(){
       //move<<<numberBlocks,threadsPerBlock>>>(d_b,d_a);
   }
   reduction<<<count/threadsPerBlock, threadsPerBlock>>>(d_a,d_partSum);
-  reduction<<<(count/threai2dsPerBlock/threadsPerBlock),threadsPerBlock>>>(d_partSum,d_ppartSum);
+  reduction<<<(count/threadsPerBlock/threadsPerBlock),threadsPerBlock>>>(d_partSum,d_ppartSum);
   sumGen<<<1,1>>>(d_ppartSum,d_sum);
   assign<<<1,1>>>(d_a, d_speNum);
   // cudaDeviceSynchronize();
