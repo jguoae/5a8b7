@@ -93,16 +93,16 @@ __global__ void sumGen (double *in, double *out) {
   }
 }
 
-__global__ void assign (double *a, double *mid, double *spe) {
-  *mid = a[count/2+N/2];
-  *spe = a[17*N+31];
+__global__ void assign (double *a, double *spe) {
+  spe[0] = a[count/2+N/2];
+  spe[1] = a[17*N+31];
 }
 
 int main(){
 
   double A[count];
-  double sum, speNum, midNum;
-  double *d_a, *d_b, *d_partSum, *d_ppartSum, *d_sum, *d_speNum, *d_midNum;
+  double sum, speNum[2];
+  double *d_a, *d_b, *d_partSum, *d_ppartSum, *d_sum, *d_speNum;
   int size = N*N*sizeof(double);
 
   for(int i=0;i<N;i++){
@@ -116,6 +116,7 @@ int main(){
   cudaMalloc((void **)&d_partSum, size/threadsPerBlock);
   cudaMalloc((void **)&d_ppartSum, size/threadsPerBlock*threadsPerBlock);
   cudaMalloc((void **)&d_sum, sizeof(double));
+  cudaMalloc((void **)&d_speNum,2*sizeof(double));
   cudaMemcpy(d_a, A, size, cudaMemcpyHostToDevice);
   double startTime = clock();
 
@@ -126,19 +127,18 @@ int main(){
   // reduction<<<count/threadsPerBlock, threadsPerBlock>>>(d_a,d_partSum);
   // reduction<<<(count/threadsPerBlock*threadsPerBlock),(count/threadsPerBlock)>>>(d_partSum,d_ppartSum);
   // sumGen<<<1,1>>>(d_ppartSum,d_sum);
-  assign<<<1,1>>>(d_a, d_speNum, d_midNum);
+  assign<<<1,1>>>(d_a, d_speNum);
   // cudaDeviceSynchronize();
 
   double endTime = clock();
   cudaMemcpy(&sum, d_sum, sizeof(double), cudaMemcpyDeviceToHost);
-  cudaMemcpy(&speNum, d_speNum, sizeof(double), cudaMemcpyDeviceToHost);
-  cudaMemcpy(&midNum, d_midNum, sizeof(double), cudaMemcpyDeviceToHost);
-  cudaFree(d_a);cudaFree(d_b);cudaFree(d_partSum);cudaFree(d_ppartSum);cudaFree(d_sum);cudaFree(d_speNum);cudaFree(d_midNum);
+  cudaMemcpy(speNum, d_speNum, sizeof(double), cudaMemcpyDeviceToHost);
+  cudaFree(d_a);cudaFree(d_b);cudaFree(d_partSum);cudaFree(d_ppartSum);cudaFree(d_sum);cudaFree(d_speNum);
 
   cout<<"time: "<<endTime-startTime<<endl;
   cout<<"Sum: "<<sum<<endl;
-  cout<<"A[n/2][n/2]: "<<midNum<<endl;
-  cout<<"A[17][31]: "<<speNum<<endl;
+  cout<<"A[n/2][n/2]: "<<spe[0]<<endl;
+  cout<<"A[17][31]: "<<spe[1]<<endl;
 
   return 0;
 }
