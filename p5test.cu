@@ -12,48 +12,48 @@ using namespace std;
 #define threadsPerBlock 512
 #define numberBlocks N*N/threadsPerBlock
 
-__device__ int partition(double* input, int start, int end)
-{
-    double pivot = input[end];
-
-    while(start < end){
-        while(input[start] < pivot)
-            start++;
-        while (input[end] > pivot)
-            end--;
-        if (input[start] == input[end])
-            start++;
-        else if(start < end){
-            double tmp = input[start];
-            input[start] = input[end];
-            input[end] = tmp;
-        }
-    }
-    return end;
-}
-
-__device__ double quickSelect(double* input, int p, int r, int k){
-    if(p == r){
-      return input[p];
-    }
-    int j = partition(input, p, r);
-    int length = j - p + 1;
-    if (length == k){
-      return input[j];
-    }
-    else if( k < length ){
-      return quickSelect(input, p, j - 1, k);
-    }
-    else{
-      return quickSelect(input, j + 1, r, k - length);
-    }
-}
+// __device__ int partition(double* input, int start, int end)
+// {
+//     double pivot = input[end];
+//
+//     while(start < end){
+//         while(input[start] < pivot)
+//             start++;
+//         while (input[end] > pivot)
+//             end--;
+//         if (input[start] == input[end])
+//             start++;
+//         else if(start < end){
+//             double tmp = input[start];
+//             input[start] = input[end];
+//             input[end] = tmp;
+//         }
+//     }
+//     return end;
+// }
+//
+// __device__ double quickSelect(double* input, int p, int r, int k){
+//     if(p == r){
+//       return input[p];
+//     }
+//     int j = partition(input, p, r);
+//     int length = j - p + 1;
+//     if (length == k){
+//       return input[j];
+//     }
+//     else if( k < length ){
+//       return quickSelect(input, p, j - 1, k);
+//     }
+//     else{
+//       return quickSelect(input, j + 1, r, k - length);
+//     }
+// }
 
 __device__ void sort(double* input){
   for(int i=0;i<5;i++){
     for(int j=i;j<5;j++){
       if(input[j]<input[i]){
-        int new_temp = input[i];
+        double new_temp = input[i];
         input[i] = input[j];
         input[j] = new_temp;
       }
