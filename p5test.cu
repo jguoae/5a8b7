@@ -60,7 +60,8 @@ __global__ void median (double *a) {
     tempCompare[2] = a[number+1];
     tempCompare[3] = a[number-N];
     tempCompare[4] = a[number+N];
-    a[number] = quickSelect(tempCompare,0,4,2);
+    // a[number] = quickSelect(tempCompare,0,4,2);
+    a[number] = tempCompare[2];
   }
   __syncthreads();
 }
@@ -123,7 +124,7 @@ int main(){
   double startTime = clock();
 
   for(int i=0;i<1;i++){
-      // median<<<numberBlocks,threadsPerBlock>>>(d_a);
+      median<<<numberBlocks,threadsPerBlock>>>(d_a);
       //move<<<numberBlocks,threadsPerBlock>>>(d_b,d_a);
   }
   // reduction<<<count/threadsPerBlock, threadsPerBlock>>>(d_a,d_partSum);
