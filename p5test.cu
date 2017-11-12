@@ -24,7 +24,7 @@ __device__ int partition(double* input, int start, int end)
         if (input[start] == input[end])
             start++;
         else if(start < end){
-            int tmp = input[start];
+            double tmp = input[start];
             input[start] = input[end];
             input[end] = tmp;
         }
@@ -60,8 +60,8 @@ __global__ void median (double *a) {
     tempCompare[2] = a[number+1];
     tempCompare[3] = a[number-N];
     tempCompare[4] = a[number+N];
-    // a[number] = quickSelect(tempCompare,0,4,2);
-    a[number] = tempCompare[2];
+    a[number] = quickSelect(tempCompare,0,4,2);
+    // a[number] = tempCompare[2];
   }
   __syncthreads();
 }
