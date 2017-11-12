@@ -137,8 +137,8 @@ int main(){
 
   cout<<"time: "<<endTime-startTime<<endl;
   cout<<"Sum: "<<sum<<endl;
-  cout<<"A[n/2][n/2]: "<<spe[0]<<endl;
-  cout<<"A[17][31]: "<<spe[1]<<endl;
+  cout<<"A[n/2][n/2]: "<<speNum[0]<<endl;
+  cout<<"A[17][31]: "<<speNum[1]<<endl;
 
   return 0;
 }
