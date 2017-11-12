@@ -34,7 +34,7 @@ __device__ int partition(double* input, int start, int end)
 
 __device__ double quickSelect(double* input, int p, int r, int k)
 {
-    if(p == r){i2i2
+    if(p == r){
       return input[p];
     }
     int j = partition(input, p, r);
@@ -74,7 +74,7 @@ __global__ void median (double *a) {
 __global__ void reduction (double *in, double *out) {
   __shared__ double temp[threadsPerBlock];
   int id = threadIdx.x;
-  temp[id] = in[blockIdx.x*blockDim.x + id];i2
+  temp[id] = in[blockIdx.x*blockDim.x + id];
   if(id<500 && id>11){ temp[id] += temp[id+500]; __syncthreads();}
   if(id<256){ temp[id] += temp[id+256]; __syncthreads();}
   if(id<128){ temp[id] += temp[id+128]; __syncthreads();}
