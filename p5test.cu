@@ -7,7 +7,7 @@
 #include <vector>
 using namespace std;
 
-#define N 4000
+#define N 2000
 #define count N*N
 #define threadsPerBlock 1000
 #define numberBlocks N*N/threadsPerBlock
@@ -34,7 +34,7 @@ __device__ int partition(double* input, int start, int end)
 
 __device__ double quickSelect(double* input, int p, int r, int k)
 {
-    if(p == r){
+    if(p == r){i2i2
       return input[p];
     }
     int j = partition(input, p, r);
@@ -50,7 +50,7 @@ __device__ double quickSelect(double* input, int p, int r, int k)
     }
 }
 
-__global__ void median (double *a) {//a[n][n]
+__global__ void median (double *a) {
   int number = blockIdx.x*blockDim.x + threadIdx.x;
 
   if((number > N-1) && (number/N != 0) && (number/N != N-1) && (number < N*N-N)){
@@ -74,7 +74,7 @@ __global__ void median (double *a) {//a[n][n]
 __global__ void reduction (double *in, double *out) {
   __shared__ double temp[threadsPerBlock];
   int id = threadIdx.x;
-  temp[id] = in[blockIdx.x*blockDim.x + id];
+  temp[id] = in[blockIdx.x*blockDim.x + id];i2
   if(id<500 && id>11){ temp[id] += temp[id+500]; __syncthreads();}
   if(id<256){ temp[id] += temp[id+256]; __syncthreads();}
   if(id<128){ temp[id] += temp[id+128]; __syncthreads();}
