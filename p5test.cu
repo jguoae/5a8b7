@@ -140,7 +140,7 @@ int main(){
 
   cout<<"time: "<<endTime-startTime<<endl;
   cout<<"Sum: "<<sum<<endl;
-  cout<<"A[n/2][n/2]: "<<speNum[0]<<"    "<<A[count/2+N/2]<<"    "<<A[count/2+N/2]<<endl;
+  cout<<"A[n/2][n/2]: "<<speNum[0]<<"    "<<A[count/2+N/2]<<"    "<<B[count/2+N/2]<<endl;
   cout<<"A[17][31]: "<<speNum[1]<<"    "<<A[17*N+31]<<"    "<<B[17*N+31]<<endl;
 
   return 0;
