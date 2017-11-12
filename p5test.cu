@@ -66,7 +66,7 @@ __global__ void median (double *a, double *b) {
     __syncthreads();
     // b[number] = quickSelect(tempCompare,0,4,2);
     // a[number] = tempCompare[2];
-    sort(tempCompare,tempCompare+sizeof(tempCompare)/sizeof(tempCompare[0]);)
+    sort(tempCompare,tempCompare+sizeof(tempCompare)/sizeof(tempCompare[0]));
     b[number]=tempCompare[2];
   }
   else{
@@ -106,7 +106,7 @@ __global__ void assign (double *a, double *spe) {
   spe[0] = a[count/2+N/2];
   spe[1] = a[17*N+31];
 }
-_syncthreads();
+
 int main(){
   double A[count], B[count];
   double sum[1], speNum[2];
