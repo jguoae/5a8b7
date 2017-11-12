@@ -50,7 +50,7 @@ __device__ double quickSelect(double* input, int p, int r, int k)
     }
 }
 
-__global__ void median (double *a) {
+__global__ void median (double *a) {//a[n][n]
   int number = blockIdx.x*blockDim.x + threadIdx.x;
 
   if((number > N-1) && (number/N != 0) && (number/N != N-1) && (number < N*N-N)){
@@ -124,7 +124,7 @@ int main(){
   cudaMemcpy(d_a, A, size, cudaMemcpyHostToDevice);
   double startTime = clock();
 
-  for(int i=0;i<10;i++){
+  for(int i=0;i<1;i++){
       median<<<numberBlocks,threadsPerBlock>>>(d_a);
       //move<<<numberBlocks,threadsPerBlock>>>(d_b,d_a);
   }
