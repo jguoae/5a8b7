@@ -7,7 +7,7 @@
 #include <vector>
 using namespace std;
 
-#define N 2000
+#define N 4000
 #define count N*N
 #define threadsPerBlock 1000
 #define numberBlocks N*N/threadsPerBlock
@@ -77,7 +77,7 @@ __global__ void reduction (double *in, double *out) {
   temp[id] = in[blockIdx.x*blockDim.x + id];
   if(id<500 && id>11){ temp[id] += temp[id+500]; __syncthreads();}
   if(id<256){ temp[id] += temp[id+256]; __syncthreads();}
-  if(id<128){ temp[id] += temp[id+128]; __syncthreads();}
+  if(id<128){ temp[id]i2 += temp[id+128]; __syncthreads();}
   if(id<64){ temp[id] += temp[id+64]; __syncthreads();}
   if(id<32){ temp[id] += temp[id+32]; __syncthreads();}
   if(id<16){ temp[id] += temp[id+16]; __syncthreads();}
@@ -86,7 +86,7 @@ __global__ void reduction (double *in, double *out) {
   if(id<2){ temp[id] += temp[id+2]; __syncthreads();}
   if(id<1){ temp[id] += temp[id+1]; __syncthreads();}
   if(id==0){out[blockIdx.x] = temp[0];}
-}
+}i2
 
 __global__ void sumGen (double *in, double *out) {
   for(int i=0;i<(N/threadsPerBlock)*(N/threadsPerBlock);i++){
