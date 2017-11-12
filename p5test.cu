@@ -89,7 +89,7 @@ __global__ void move (double *b, double *a) {
 
 __global__ void reduction (double *in, double *out) {
   __shared__ double temp[1024];
-  int id = threadIdx.x-1;
+  int id = threadIdx.x;
   temp[id] = in[blockIdx.x*blockDim.x + id];
   __syncthreads();
   if(id==0){
@@ -99,7 +99,7 @@ __global__ void reduction (double *in, double *out) {
   }
   __syncthreads();
   if(id<512){
-    temp[id] += temp[id+500]; __syncthreads();
+    temp[id] += temp[id+512]; __syncthreads();
   }
   if(id<256){
     temp[id] += temp[id+256]; __syncthreads();
