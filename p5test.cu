@@ -60,7 +60,7 @@ __global__ void median (double *a) {
     tempCompare[2] = a[number+1];
     tempCompare[3] = a[number-N];
     tempCompare[4] = a[number+N];
-    _syncthreads();
+    __syncthreads();
     a[number] = quickSelect(tempCompare,0,4,2);
     // a[number] = tempCompare[2];
   }
