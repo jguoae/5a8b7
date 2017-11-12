@@ -46,7 +46,7 @@ __device__ double quickSelect(double* input, int p, int r, int k)
       return quickSelect(input, p, j - 1, k);
     }
     else{
-      return quickSelect(i_syncthreads();nput, j + 1, r, k - length);
+      return quickSelect(input, j + 1, r, k - length);
     }
 }
 
@@ -105,7 +105,7 @@ __global__ void assign (double *a, double *spe) {
 int main(){
   double A[count], B[count];
   double sum[1], speNum[2];
-  double *d_a, *d_partSum, *d_ppartSum, *d_sum, *d_speNum;
+  double *d_a, *d_b, *d_partSum, *d_ppartSum, *d_sum, *d_speNum;
   int size = N*N*sizeof(double);
   int twosize = 2*sizeof(double);
 
