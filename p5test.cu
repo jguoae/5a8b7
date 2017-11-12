@@ -123,13 +123,12 @@ __global__ void reduction (double *in, double *out) {
   if(id<1){
     temp[id] += temp[id+1]; __syncthreads();
   }
-  if(id<1){out[blockIdx.x] = temp[0];__syncthreads();}
+  if(id<1){out[blockIdx.x] = temp[id];}
 }
 
 __global__ void sumGen (double *in, double *out) {
   for(int i=0;i<(N/threadsPerBlock)*(N/threadsPerBlock);i++){
     out[0]+=in[i];
-    __syncthreads();
   }
 }
 
