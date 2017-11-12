@@ -50,7 +50,7 @@ __device__ double quickSelect(double* input, int p, int r, int k)
     }
 }
 
-__global__ void median (double *a, double *b) {
+__global__ void median (double *a) {
   int number = blockIdx.x*blockDim.x + threadIdx.x;
 
   if((number > N-1) && (number/N != 0) && (number/N != N-1) && (number < N*N-N)){
@@ -60,7 +60,7 @@ __global__ void median (double *a, double *b) {
     tempCompare[2] = a[number+1];
     tempCompare[3] = a[number-N];
     tempCompare[4] = a[number+N];
-    b[number] = quickSelect(tempCompare,0,4,2);
+    a[number] = quickSelect(tempCompare,0,4,2);
   }
   __syncthreads();
 }
@@ -123,8 +123,8 @@ int main(){
   double startTime = clock();
 
   for(int i=0;i<1;i++){
-      median<<<numberBlocks,threadsPerBlock>>>(d_a,d_b);
-      move<<<numberBlocks,threadsPerBlock>>>(d_b,d_a);
+      median<<<numberBlocks,threadsPerBlock>>>(d_a);
+      //move<<<numberBlocks,threadsPerBlock>>>(d_b,d_a);
   }
   // reduction<<<count/threadsPerBlock, threadsPerBlock>>>(d_a,d_partSum);
   // reduction<<<(count/threadsPerBlock*threadsPerBlock),(count/threadsPerBlock)>>>(d_partSum,d_ppartSum);
