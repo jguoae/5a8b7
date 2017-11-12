@@ -9,7 +9,7 @@ using namespace std;
 
 #define N 1000
 #define count N*N
-#define threadsPerBlock 512
+#define threadsPerBlock 1000
 #define numberBlocks N*N/threadsPerBlock
 
 // __device__ int partition(double* input, int start, int end)
@@ -91,17 +91,35 @@ __global__ void reduction (double *in, double *out) {
   __shared__ double temp[threadsPerBlock];
   int id = threadIdx.x;
   temp[id] = in[blockIdx.x*blockDim.x + id];
-  // if(id<500 && id>11){ temp[id] += temp[id+500]; __syncthreads();}
-  if(id<256){ temp[id] += temp[id+256]; __syncthreads();}
-  if(id<128){ temp[id] += temp[id+128]; __syncthreads();}
-  if(id<64){ temp[id] += temp[id+64]; __syncthreads();}
-  if(id<32){ temp[id] += temp[id+32]; __syncthreads();}
-  if(id<16){ temp[id] += temp[id+16]; __syncthreads();}
-  if(id<8){ temp[id] += temp[id+8]; __syncthreads();}
-  if(id<4){ temp[id] += temp[id+4]; __syncthreads();}
-  if(id<2){ temp[id] += temp[id+2]; __syncthreads();}
-  if(id<1){ temp[id] += temp[id+1]; __syncthreads();}
-  if(id==0){out[blockIdx.x] = temp[0];}
+  if(id<500 && id>11){ temp[id] += temp[id+500]; __syncthreads();}
+  // if(id<256){
+     temp[id] += temp[id+256]; __syncthreads();
+  //  }
+  // if(id<128){
+    temp[id] += temp[id+128]; __syncthreads();
+  // }
+  // if(id<64){
+    temp[id] += temp[id+64]; __syncthreads();
+  // }
+  // if(id<32){
+    temp[id] += temp[id+32]; __syncthreads();
+  // }
+  // if(id<16){
+    temp[id] += temp[id+16]; __syncthreads();
+  // }
+  // if(id<8){
+    temp[id] += temp[id+8]; __syncthreads();
+  // }
+  // if(id<4){
+    temp[id] += temp[id+4]; __syncthreads();
+  // }
+  // if(id<2){
+    temp[id] += temp[id+2]; __syncthreads();
+  // }
+  // if(id<1){
+    temp[id] += temp[id+1]; __syncthreads();
+  // }
+  if(id<1){out[blockIdx.x] = temp[0];}
 }
 
 __global__ void sumGen (double *in, double *out) {
