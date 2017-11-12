@@ -102,7 +102,7 @@ __global__ void assign (double *a, double *spe) {
 int main(){
 
   double A[count], B[count];
-  double sum, speNum[2];
+  double sum[1], speNum[2];
   double *d_a, *d_b, *d_partSum, *d_ppartSum, *d_sum, *d_speNum;
   int size = N*N*sizeof(double);
   int twosize = 2*sizeof(double);
@@ -127,20 +127,20 @@ int main(){
       median<<<numberBlocks,threadsPerBlock>>>(d_a);
       //move<<<numberBlocks,threadsPerBlock>>>(d_b,d_a);
   }
-  // reduction<<<count/threadsPerBlock, threadsPerBlock>>>(d_a,d_partSum);
-  // reduction<<<(count/threadsPerBlock*threadsPerBlock),(count/threadsPerBlock)>>>(d_partSum,d_ppartSum);
+  reduction<<<count/threadsPerBlock, threadsPerBlock>>>(d_a,d_partSum);
+  reduction<<<(count/threadsPerBlock/threadsPerBlock),(count/threadsPerBlock)>>>(d_partSum,d_ppartSum);
   // sumGen<<<1,1>>>(d_ppartSum,d_sum);
   assign<<<1,1>>>(d_a, d_speNum);
   // cudaDeviceSynchronize();
 
   double endTime = clock();
-  cudaMemcpy(&sum, d_sum, sizeof(double), cudaMemcpyDeviceToHost);
+  cudaMemcpy(sum, d_sum, sizeof(double), cudaMemcpyDeviceToHost);
   cudaMemcpy(speNum, d_speNum, twosize, cudaMemcpyDeviceToHost);
   cudaMemcpy(B, d_a, size, cudaMemcpyDeviceToHost);
   cudaFree(d_a);cudaFree(d_b);cudaFree(d_partSum);cudaFree(d_ppartSum);cudaFree(d_sum);cudaFree(d_speNum);
 
   cout<<"time: "<<endTime-startTime<<endl;
-  cout<<"Sum: "<<sum<<endl;
+  cout<<"Sum: "<<sum[0]<<endl;
   cout<<"A[n/2][n/2]: "<<speNum[0]<<"    "<<A[count/2+N/2]<<"    "<<B[count/2+N/2]<<endl;
   cout<<"A[17][31]: "<<speNum[1]<<"    "<<A[17*N+31]<<"    "<<B[17*N+31]<<endl;
 
