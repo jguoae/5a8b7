@@ -47,7 +47,7 @@ __device__ double quickSelect(double* input, int p, int r, int k)
     }
     else{
       return quickSelect(input, j + 1, r, k - length);
-    }sum
+    }
 }
 
 __global__ void median (double *a) {
@@ -138,7 +138,7 @@ int main(){
   cudaMemcpy(sum, d_sum, sizeof(double), cudaMemcpyDeviceToHost);
   cudaMemcpy(speNum, d_speNum, twosize, cudaMemcpyDeviceToHost);
   cudaMemcpy(B, d_a, size, cudaMemcpyDeviceToHost);
-  cudaFree(d_a);cudaFree(d_b);cudaFree(d_partSum);cudaFree(d_ppartSum);cudaFree(d_sum);cudaFree(d_speNum);
+  cudaFree(d_a);cudaFree(d_partSum);cudaFree(d_ppartSum);cudaFree(d_sum);cudaFree(d_speNum);
 
   cout<<"time: "<<endTime-startTime<<endl;
   cout<<"Sum: "<<sum[0]<<endl;
