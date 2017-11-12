@@ -76,7 +76,7 @@ __global__ void median (double *a, double *b) {
     sort(tempCompare);
     b[number]=tempCompare[2];
   }
-  else{
+  else if(number < N*N){
     b[number]=a[number];
   }
   __syncthreads();
@@ -95,6 +95,7 @@ __global__ void reduction (double *in, double *out) {
   if(id<500 && id>11){
     temp[id] += temp[id+500]; __syncthreads();
   }
+  __syncthreads();
   if(id<256){
     temp[id] += temp[id+256]; __syncthreads();
   }
@@ -156,9 +157,7 @@ int main(){
   cudaMalloc((void **)&d_partSum, size/threadsPerBlock);
   cudaMalloc((void **)&d_ppartSum, size/threadsPerBlock/threadsPerBlock);
   cudaMalloc((void **)&d_sum, sizeof(double));
-  cudaMalloc((void **)&d_speNum,twosize);
-  cudaMemcpy(d_a, A, size, cudaMemcpyHostToDevice);
-  cudaMemcpy(d_sum, sum, sizeof(double), cudaMemcpyHostToDevice);
+  cudaMalloc((void **)&d_speNum,twosize);"   "<<mcpyHostToDevice);
   double startTime = clock();
 
   for(int i=0;i<10;i++){
@@ -171,7 +170,7 @@ int main(){
   reduction<<<(count/threadsPerBlock/threadsPerBlock),threadsPerBlock>>>(d_partSum,d_ppartSum);
   sumGen<<<1,1>>>(d_ppartSum,d_sum);
   assign<<<1,1>>>(d_a, d_speNum);
-  // cudaDeviceSynchronize();
+  cudaDeviceSynchronize();
 
   double endTime = clock();
   cudaMemcpy(sum, d_sum, sizeof(double), cudaMemcpyDeviceToHost);
