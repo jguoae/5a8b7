@@ -88,19 +88,14 @@ __global__ void move (double *b, double *a) {
 }
 
 __global__ void reduction (double *in, double *out) {
-  __shared__ double temp[1024];
+  __shared__ double temp[threadsPerBlock];
   int id = threadIdx.x;
   temp[id] = in[blockIdx.x*blockDim.x + id];
   __syncthreads();
-  if(id==0){
-    for(int i=1000;i<1024;i++){
-      temp[i] = 0;
-    }
-  }
-  __syncthreads();
-  if(id<512){
+  if(id<512 && id>11){
     temp[id] += temp[id+512]; __syncthreads();
   }
+  __syncthreads();
   if(id<256){
     temp[id] += temp[id+256]; __syncthreads();
   }
@@ -128,12 +123,13 @@ __global__ void reduction (double *in, double *out) {
   if(id<1){
     temp[id] += temp[id+1]; __syncthreads();
   }
-  if(id<1){out[blockIdx.x] = temp[0];}
+  if(id<1){out[blockIdx.x] = temp[0];__syncthreads();}
 }
 
 __global__ void sumGen (double *in, double *out) {
   for(int i=0;i<(N/threadsPerBlock)*(N/threadsPerBlock);i++){
     out[0]+=in[i];
+    __syncthreads();
   }
 }
 
