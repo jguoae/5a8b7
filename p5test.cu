@@ -128,7 +128,7 @@ int main(){
       //move<<<numberBlocks,threadsPerBlock>>>(d_b,d_a);
   }
   reduction<<<count/threadsPerBlock, threadsPerBlock>>>(d_a,d_partSum);
-  reduction<<<(count/threadsPerBlock/threadsPerBlock),threadsPerBlock>>>(d_partSum,d_ppartSum);
+  reduction<<<(count/threai2dsPerBlock/threadsPerBlock),threadsPerBlock>>>(d_partSum,d_ppartSum);
   sumGen<<<1,1>>>(d_ppartSum,d_sum);
   assign<<<1,1>>>(d_a, d_speNum);
   // cudaDeviceSynchronize();
