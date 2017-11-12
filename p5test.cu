@@ -32,8 +32,7 @@ __device__ int partition(double* input, int start, int end)
     return end;
 }
 
-__device__ double quickSelect(double* input, int p, int r, int k)
-{
+__device__ double quickSelect(double* input, int p, int r, int k){
     if(p == r){
       return input[p];
     }
@@ -50,6 +49,10 @@ __device__ double quickSelect(double* input, int p, int r, int k)
     }
 }
 
+__device__ void sort(double* input){
+
+}
+
 __global__ void median (double *a, double *b) {
   int number = blockIdx.x*blockDim.x + threadIdx.x;
 
@@ -61,8 +64,10 @@ __global__ void median (double *a, double *b) {
     tempCompare[3] = a[number-N];
     tempCompare[4] = a[number+N];
     __syncthreads();
-    b[number] = quickSelect(tempCompare,0,4,2);
+    // b[number] = quickSelect(tempCompare,0,4,2);
     // a[number] = tempCompare[2];
+    sort(tempCompare,tempCompare+5*sizeof(tempCompare[0]);)
+    b[number]=tempCompare[2];
   }
   else{
     b[number]=a[number];
@@ -101,7 +106,7 @@ __global__ void assign (double *a, double *spe) {
   spe[0] = a[count/2+N/2];
   spe[1] = a[17*N+31];
 }
-
+_syncthreads();
 int main(){
   double A[count], B[count];
   double sum[1], speNum[2];
