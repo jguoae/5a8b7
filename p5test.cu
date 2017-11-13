@@ -176,7 +176,7 @@ int main(){
 
 
   cudaMemcpy(sum, d_sum, sizeof(double), cudaMemcpyDeviceToHost);
-  cudaMemcpy(speNum, d  int endTime = clock();_speNum, twosize, cudaMemcpyDeviceToHost);
+  cudaMemcpy(speNum, d_speNum, twosize, cudaMemcpyDeviceToHost);
   cudaMemcpy(B, d_a, size, cudaMemcpyDeviceToHost);
   cudaFree(d_a);cudaFree(d_b);cudaFree(d_partSum);cudaFree(d_ppartSum);cudaFree(d_sum);cudaFree(d_speNum);
 
