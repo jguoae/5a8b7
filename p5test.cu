@@ -146,7 +146,7 @@ int main(){
   for(int i=0;i<N;i++){
     for(int j=0;j<N;j++){
       // A[i*N+j] = sin(i*i+j)*sin(i*i+j)+cos(i-j);
-      A[i*N+j] = 1;
+      A[i*N+j] = j;
       B[i*N+j] = 0;
     }
   }
