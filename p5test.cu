@@ -61,7 +61,7 @@ __device__ void sort(double* input){
 
 __global__ void median (double *a, double *b) {
   int number = blockIdx.x*blockDim.x + threadIdx.x;
-  if((number > N-1) && (number/N != 0) && (number/N != N-1) && (number < N*N-N)){
+  if((number > N-1) && (number/N > 0) && (number/N < N-1) && (number < N*N-N)){
     double tempCompare[5];
     tempCompare[0] = a[number];
     tempCompare[1] = a[number-1];
@@ -185,7 +185,7 @@ int main(){
   cudaMemcpy(B, d_a, size, cudaMemcpyDeviceToHost);
   cudaFree(d_a);cudaFree(d_b);cudaFree(d_partSum);cudaFree(d_ppartSum);cudaFree(d_sum);cudaFree(d_speNum);
 
-
+cout<<"A[999][999]: "<<A[999*N+999]<<"    "<<B[999*N+999]<<endl;
 
   cout.precision(8);
 
