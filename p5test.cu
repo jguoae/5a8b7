@@ -6,7 +6,7 @@
 #include <vector>
 using namespace std;
 
-#define N 1000
+#define N 2000
 #define count N*N
 #define threadsPerBlock 1000
 #define numberBlocks N*N/threadsPerBlock
@@ -200,7 +200,7 @@ int main(){
   // cout<<"time: "<<(endTime-startTime)/CLOCKS_PER_SEC<<endl;
   // cout<<"time: "<<time<<endl;
   // cout<<"time: "<<elapsed_seconds<<endl;
-  printf("time :%f/n",elapsed_seconds);
+  printf("time :%f\n",elapsed_seconds);
   cout<<"Sum: "<<sum[0]<<endl;
   cout<<"A[n/2][n/2]: "<<speNum[0]<<"    "<<A[count/2+N/2]<<"    "<<B[count/2+N/2]<<endl;
   cout<<"A[17][31]: "<<speNum[1]<<"    "<<A[17*N+31]<<"    "<<B[17*N+31]<<endl;
