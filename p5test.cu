@@ -61,7 +61,6 @@ __device__ void sort(double* input){
 
 __global__ void median (double *a, double *b) {
   int number = blockIdx.x*blockDim.x + threadIdx.x;
-startTime = clock();
   if((number > N-1) && (number/N != 0) && (number/N != N-1) && (number < N*N-N)){
     double tempCompare[5];
     tempCompare[0] = a[number];
@@ -95,7 +94,7 @@ __global__ void reduction (double *in, double *out) {
   }
   __syncthreads();
   if(id<256){
-    temp[id] += temp[id+256]; __syncthreads();startTime = clock();
+    temp[id] += temp[id+256]; __syncthreads();
   }
   if(id<128){
     temp[id] += temp[id+128]; __syncthreads();
