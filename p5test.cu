@@ -1,7 +1,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <math.h>
-#include <time.h>
+#include <ctime>
 #include <vector>
 using namespace std;
 
@@ -147,7 +147,7 @@ int main(){
   for(int i=0;i<N;i++){
     for(int j=0;j<N;j++){
       // A[i*N+j] = sin(i*i+j)*sin(i*i+j)+cos(i-j);
-      A[i*N+j] = 1;
+      A[i*N+j] = i*N+j;
       B[i*N+j] = 0;
     }
   }
@@ -185,7 +185,7 @@ int main(){
   cout.precision(8);
 
   // cout<<"time: "<<endTime<<"   "<<startTime<<"   "<<CLOCKS_PER_SEC<<endl;
-  cout<<"time: "<<(endTime-startTime)*1000/CLOCKS_PER_SEC<<endl;
+  cout<<"time: "<<double(endTime-startTime)*1000/CLOCKS_PER_SEC<<endl;
   cout<<"Sum: "<<sum[0]<<endl;
   cout<<"A[n/2][n/2]: "<<speNum[0]<<"    "<<A[count/2+N/2]<<"    "<<B[count/2+N/2]<<endl;
   cout<<"A[17][31]: "<<speNum[1]<<"    "<<A[17*N+31]<<"    "<<B[17*N+31]<<endl;
