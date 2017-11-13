@@ -1,9 +1,7 @@
-#include <float.h>
 #include <cstdlib>
 #include <iostream>
 #include <math.h>
-#include <ctime>
-#include <algorithm>
+#include <time.h>
 #include <vector>
 using namespace std;
 
@@ -21,7 +19,7 @@ using namespace std;
 //             start++;
 //         while (input[end] > pivot)
 //             end--;
-//         if (input[start] == input[end])
+//         if (input[start] == inpucout<<"time: "<<endTime<<"   "<<startTime<<"   "<<CLOCKS_PER_SEC<<endl;t[end])
 //             start++;
 //         else if(start < end){
 //             double tmp = input[start];
@@ -40,7 +38,7 @@ using namespace std;
 //     int length = j - p + 1;
 //     if (length == k){
 //       return input[j];
-//     }
+//     }cout<<"time: "<<endTime<<"   "<<startTime<<"   "<<CLOCKS_PER_SEC<<endl;
 //     else if( k < length ){
 //       return quickSelect(input, p, j - 1, k);
 //     }
@@ -99,7 +97,6 @@ __global__ void reduction (double *in, double *out) {
   if(id<256){
     temp[id] += temp[id+256]; __syncthreads();
   }
-  __syncthreads();
   if(id<128){
     temp[id] += temp[id+128]; __syncthreads();
   }
@@ -186,7 +183,8 @@ int main(){
 
   cout.precision(8);
 
-  cout<<"time: "<<endTime<<"   "<<startTime<<"   "<<CLOCKS_PER_SEC<<endl;
+  // cout<<"time: "<<endTime<<"   "<<startTime<<"   "<<CLOCKS_PER_SEC<<endl;
+  cout<<"time: "<<(endTime-startTime)*1000/CLOCKS_PER_SEC<<endl;
   cout<<"Sum: "<<sum[0]<<endl;
   cout<<"A[n/2][n/2]: "<<speNum[0]<<"    "<<A[count/2+N/2]<<"    "<<B[count/2+N/2]<<endl;
   cout<<"A[17][31]: "<<speNum[1]<<"    "<<A[17*N+31]<<"    "<<B[17*N+31]<<endl;
