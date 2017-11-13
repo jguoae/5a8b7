@@ -177,7 +177,9 @@ int main(){
   sumGen<<<1,1>>>(d_ppartSum,d_sum);
   assign<<<1,1>>>(d_a, d_speNum);
   cudaDeviceSynchronize();
-
+  for(int i=0;i<100;i++){
+    int x = i;
+  }
   clock_t endTime = clock();
   // cudaEventRecord(endTime, 0);
   // cudaEventSynchronize(endTime) ;
