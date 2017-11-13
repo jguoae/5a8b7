@@ -145,7 +145,7 @@ int main(){
 
   for(int i=0;i<N;i++){
     for(int j=0;j<N;j++){
-      A[i*N+j] = sin(i*i+j)*sin(i*i+j)+cos(i-j);
+      A[i*N+j] = 1+ sin(i*i+j)*sin(i*i+j)+cos(i-j);
       // A[i*N+j] = j;
       B[i*N+j] = 0;
     }
@@ -158,8 +158,9 @@ int main(){
   cudaMalloc((void **)&d_speNum,twosize);
   cudaMemcpy(d_a, A, size, cudaMemcpyHostToDevice);
   cudaMemcpy(d_sum, sum, sizeof(double), cudaMemcpyHostToDevice);
-  clock_t startTime = clock();
-
+  // clock_t startTime = clock();
+  cudaEvent_t startTime, endTime;
+  cudaEventRecord(startTime, 0);
   for(int i=0;i<10;i++){
       median<<<numberBlocks,threadsPerBlock>>>(d_a,d_b);
       cudaDeviceSynchronize();
@@ -172,7 +173,12 @@ int main(){
   assign<<<1,1>>>(d_a, d_speNum);
   cudaDeviceSynchronize();
 
-  clock_t endTime = clock();
+  // clock_t endTime = clock();
+  cudaEventRecord(endTime, 0);
+  cudaEventSynchronize(endTime) ;
+  float time;
+  cudaEventElapsedTime(&time,startTime,endTime)
+
 
   cudaMemcpy(sum, d_sum, sizeof(double), cudaMemcpyDeviceToHost);
   cudaMemcpy(speNum, d_speNum, twosize, cudaMemcpyDeviceToHost);
@@ -184,8 +190,9 @@ int main(){
   cout.precision(8);
 
   // cout<<"time: "<<endTime<<"   "<<startTime<<"   "<<CLOCKS_PER_SEC<<endl;
-  cout<<"time: "<<(endTime-startTime)/double(CLOCKS_PER_SEC)<<endl;
-  cout<<"Sum: "<<sum[0]<<endl;
+  // cout<<"time: "<<(endTime-startTime)/double(CLOCKS_PER_SEC)<<endl;
+  cout<<"time: "<<time<<endl;
+  cout<<"Sum: "<<sum[0]-1000000<<endl;
   cout<<"A[n/2][n/2]: "<<speNum[0]<<"    "<<A[count/2+N/2]<<"    "<<B[count/2+N/2]<<endl;
   cout<<"A[17][31]: "<<speNum[1]<<"    "<<A[17*N+31]<<"    "<<B[17*N+31]<<endl;
   cout<<"A[999][999]: "<<A[999*N+999]<<"    "<<B[999*N+999]<<endl;
