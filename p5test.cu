@@ -64,8 +64,8 @@ __global__ void median (double *a, double *b) {
   // if((number <N) || (number>=N*N-N)||(number/N==0)||(number/N==N-1)){
   //   b[number]=a[number];
   // }
-  if((number > N-1) && (threadIdx.x > 0) && (threadIdx.x < N-1) && (number < N*N-N)){
-    // if((number > N-1) && (number/N > 0) && (number/N < N-1) && (number < N*N-N)){
+  // if((number > N-1) && (threadIdx.x > 0) && (threadIdx.x < N-1) && (number < N*N-N)){
+  if((number > N-1) && (number%N > 0) && (number%N < N-1) && (number < N*N-N)){
     double tempCompare[5];
     tempCompare[0] = a[number];
     tempCompare[1] = a[number-1];
