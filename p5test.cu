@@ -2,7 +2,6 @@
 #include <iostream>
 #include <math.h>
 #include <ctime>
-#include <chrono>
 #include <vector>
 using namespace std;
 
@@ -163,7 +162,7 @@ int main(){
   cudaMalloc((void **)&d_speNum,twosize);
   cudaMemcpy(d_a, A, size, cudaMemcpyHostToDevice);
   cudaMemcpy(d_sum, sum, sizeof(double), cudaMemcpyHostToDevice);
-  // clock_t startTime = clock();
+  clock_t startTime = clock();
   // cudaEvent_t startTime=0, endTime=0;
   auto start = std::chrono::system_clock::now();
   // cudaEventRecord(startTime, 0);
@@ -179,7 +178,7 @@ int main(){
   assign<<<1,1>>>(d_a, d_speNum);
   cudaDeviceSynchronize();
 
-  // clock_t endTime = clock();
+  clock_t endTime = clock();
   // cudaEventRecord(endTime, 0);
   // cudaEventSynchronize(endTime) ;
   // float time;
@@ -195,9 +194,9 @@ int main(){
 
   cout.precision(8);
 
-  // cout<<"time: "<<endTime<<"   "<<startTime<<"   "<<CLOCKS_PER_SEC<<endl;
-  // cout<<"time: "<<(endTime-startTime)/double(CLOCKS_PER_SEC)<<endl;
-  cout<<"time: "<<elapsed_seconds.count()<<endl;
+  cout<<"time: "<<endTime<<"   "<<startTime<<"   "<<CLOCKS_PER_SEC<<endl;
+  // cout<<"time: "<<(endTime-startTime)/CLOCKS_PER_SEC<<endl;
+  // cout<<"time: "<<elapsed_seconds.count()<<endl;
   cout<<"Sum: "<<sum[0]<<endl;
   cout<<"A[n/2][n/2]: "<<speNum[0]<<"    "<<A[count/2+N/2]<<"    "<<B[count/2+N/2]<<endl;
   cout<<"A[17][31]: "<<speNum[1]<<"    "<<A[17*N+31]<<"    "<<B[17*N+31]<<endl;
