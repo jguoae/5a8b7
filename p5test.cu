@@ -61,7 +61,7 @@ __device__ void sort(double* input){
 
 __global__ void median (double *a, double *b) {
   int number = blockIdx.x*blockDim.x + threadIdx.x;
-
+startTime = clock();
   if((number > N-1) && (number/N != 0) && (number/N != N-1) && (number < N*N-N)){
     double tempCompare[5];
     tempCompare[0] = a[number];
@@ -95,7 +95,7 @@ __global__ void reduction (double *in, double *out) {
   }
   __syncthreads();
   if(id<256){
-    temp[id] += temp[id+256]; __syncthreads();
+    temp[id] += temp[id+256]; __syncthreads();startTime = clock();
   }
   if(id<128){
     temp[id] += temp[id+128]; __syncthreads();
@@ -147,7 +147,7 @@ int main(){
   for(int i=0;i<N;i++){
     for(int j=0;j<N;j++){
       // A[i*N+j] = sin(i*i+j)*sin(i*i+j)+cos(i-j);
-      A[i*N+j] = i*N+j;
+      A[i*N+j] = 1;
       B[i*N+j] = 0;
     }
   }
@@ -159,22 +159,21 @@ int main(){
   cudaMalloc((void **)&d_speNum,twosize);
   cudaMemcpy(d_a, A, size, cudaMemcpyHostToDevice);
   cudaMemcpy(d_sum, sum, sizeof(double), cudaMemcpyHostToDevice);
-  clock_t startTime;
-  startTime = clock();
+  clock_t startTime = clock();
 
-  // for(int i=0;i<10;i++){
-  //     median<<<numberBlocks,threadsPerBlock>>>(d_a,d_b);
-  //     cudaDeviceSynchronize();
-  //     move<<<numberBlocks,threadsPerBlock>>>(d_b,d_a);
-  //     cudaDeviceSynchronize();
-  // }
+  for(int i=0;i<10;i++){
+      median<<<numberBlocks,threadsPerBlock>>>(d_a,d_b);
+      cudaDeviceSynchronize();
+      move<<<numberBlocks,threadsPerBlock>>>(d_b,d_a);
+      cudaDeviceSynchronize();
+  }
   reduction<<<count/threadsPerBlock, threadsPerBlock>>>(d_a,d_partSum);
   reduction<<<(count/threadsPerBlock/threadsPerBlock),threadsPerBlock>>>(d_partSum,d_ppartSum);
   sumGen<<<1,1>>>(d_ppartSum,d_sum);
   assign<<<1,1>>>(d_a, d_speNum);
   cudaDeviceSynchronize();
 
-  // clock_t endTime = clock();
+  clock_t endTime = clock();
 
   cudaMemcpy(sum, d_sum, sizeof(double), cudaMemcpyDeviceToHost);
   cudaMemcpy(speNum, d_speNum, twosize, cudaMemcpyDeviceToHost);
@@ -186,7 +185,7 @@ int main(){
   cout.precision(8);
 
   // cout<<"time: "<<endTime<<"   "<<startTime<<"   "<<CLOCKS_PER_SEC<<endl;
-  cout<<"time: "<<(clock()-startTime)/double(CLOCKS_PER_SEC)<<endl;
+  cout<<"time: "<<(endTime-startTime)/double(CLOCKS_PER_SEC)<<endl;
   cout<<"Sum: "<<sum[0]<<endl;
   cout<<"A[n/2][n/2]: "<<speNum[0]<<"    "<<A[count/2+N/2]<<"    "<<B[count/2+N/2]<<endl;
   cout<<"A[17][31]: "<<speNum[1]<<"    "<<A[17*N+31]<<"    "<<B[17*N+31]<<endl;
