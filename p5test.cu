@@ -159,7 +159,7 @@ int main(){
   cudaMemcpy(d_a, A, size, cudaMemcpyHostToDevice);
   cudaMemcpy(d_sum, sum, sizeof(double), cudaMemcpyHostToDevice);
   // clock_t startTime = clock();
-  cudaEvent_t startTime, endTime;
+  cudaEvent_t startTime=0, endTime=0;
   cudaEventRecord(startTime, 0);
   for(int i=0;i<10;i++){
       median<<<numberBlocks,threadsPerBlock>>>(d_a,d_b);
@@ -177,7 +177,7 @@ int main(){
   cudaEventRecord(endTime, 0);
   cudaEventSynchronize(endTime) ;
   float time;
-  cudaEventElapsedTime(&time,startTime,endTime)
+  cudaEventElapsedTime(&time,startTime,endTime);
 
 
   cudaMemcpy(sum, d_sum, sizeof(double), cudaMemcpyDeviceToHost);
