@@ -7,9 +7,9 @@
 #include <vector>
 using namespace std;
 
-#define N 1000
+#define N 2000
 #define count N*N
-#define threadsPerBlock 500
+#define threadsPerBlock 1000
 #define numberBlocks N*N/threadsPerBlock
 
 // __device__ int partition(double* input, int start, int end)
@@ -87,17 +87,17 @@ __global__ void move (double *b, double *a) {
   a[number] = b[number];
 }
 
-__global__ void reduction (double *in, double *out) {
+__global__ void re  __syncthreads();  __syncthreads();duction (double *in, double *out) {
   __shared__ double temp[threadsPerBlock];
   int id = threadIdx.x;
   temp[id] = in[blockIdx.x*blockDim.x + id];
   __syncthreads();
-  // if(id<500 && id>11){
-  //   temp[id] += temp[id+500]; __syncthreads();
-  // }
-  // __syncthreads();
-  if(id<250&& id>5){
-    temp[id] += temp[id+250]; __syncthreads();
+  if(id<500 && id>11){
+    temp[id] += temp[id+500]; __syncthreads();
+  }
+  __syncthreads();
+  if(id<256){
+    temp[id] += temp[id+256]; __syncthreads();
   }
   __syncthreads();
   if(id<128){
