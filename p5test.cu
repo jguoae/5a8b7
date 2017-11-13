@@ -5,7 +5,7 @@
 #include <vector>
 using namespace std;
 
-#define N 2000
+#define N 4000
 #define count N*N
 #define threadsPerBlock 1000
 #define numberBlocks N*N/threadsPerBlock
