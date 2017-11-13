@@ -170,9 +170,9 @@ int main(){
       move<<<numberBlocks,threadsPerBlock>>>(d_b,d_a);
       cudaDeviceSynchronize();
   }
-  // reduction<<<count/threadsPerBlock, threadsPerBlock>>>(d_a,d_partSum);
-  // reduction<<<(count/threadsPerBlock/threadsPerBlock),threadsPerBlock>>>(d_partSum,d_ppartSum);
-  // sumGen<<<1,1>>>(d_ppartSum,d_sum);
+  reduction<<<count/threadsPerBlock, threadsPerBlock>>>(d_a,d_partSum);
+  reduction<<<(count/threadsPerBlock/threadsPerBlock),threadsPerBlock>>>(d_partSum,d_ppartSum);
+  sumGen<<<1,1>>>(d_ppartSum,d_sum);
   assign<<<1,1>>>(d_a, d_speNum);
   cudaDeviceSynchronize();
 
@@ -188,7 +188,6 @@ int main(){
   cudaMemcpy(B, d_a, size, cudaMemcpyDeviceToHost);
   cudaFree(d_a);cudaFree(d_b);cudaFree(d_partSum);cudaFree(d_ppartSum);cudaFree(d_sum);cudaFree(d_speNum);
 
-cout<<"A[999][999]: "<<A[999*N+999]<<"    "<<B[999*N+999]<<endl;
 
   cout.precision(8);
 
@@ -202,6 +201,7 @@ cout<<"A[999][999]: "<<A[999*N+999]<<"    "<<B[999*N+999]<<endl;
   cout<<"A[999][500]: "<<A[999*N+500]<<"    "<<B[999*N+500]<<endl;
   cout<<"A[500][999]: "<<A[500*N+999]<<"    "<<B[500*N+999]<<endl;
   cout<<"A[500][0]: "<<A[500*N]<<"    "<<B[500*N]<<endl;
+  cout<<"A[501][0]: "<<A[501*N]<<"    "<<B[501*N]<<endl;
 
   return 0;
 }
