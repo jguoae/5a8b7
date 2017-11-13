@@ -188,6 +188,7 @@ int main(){
   cout<<"Sum: "<<sum[0]<<endl;
   cout<<"A[n/2][n/2]: "<<speNum[0]<<"    "<<A[count/2+N/2]<<"    "<<B[count/2+N/2]<<endl;
   cout<<"A[17][31]: "<<speNum[1]<<"    "<<A[17*N+31]<<"    "<<B[17*N+31]<<endl;
+  cout<<"A[999][999]: "<<A[999*N+999]<<"    "<<B[999*N+999]<<endl;
 
   return 0;
 }
