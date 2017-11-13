@@ -87,7 +87,7 @@ __global__ void move (double *b, double *a) {
   a[number] = b[number];
 }
 
-__global__ void re  __syncthreads();  __syncthreads();duction (double *in, double *out) {
+__global__ void reduction (double *in, double *out) {
   __shared__ double temp[threadsPerBlock];
   int id = threadIdx.x;
   temp[id] = in[blockIdx.x*blockDim.x + id];
