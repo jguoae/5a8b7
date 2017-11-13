@@ -159,7 +159,8 @@ int main(){
   cudaMalloc((void **)&d_speNum,twosize);
   cudaMemcpy(d_a, A, size, cudaMemcpyHostToDevice);
   cudaMemcpy(d_sum, sum, sizeof(double), cudaMemcpyHostToDevice);
-  clock_t startTime = clock();
+  clock_t startTime;
+  startTime = clock();
 
   // for(int i=0;i<10;i++){
   //     median<<<numberBlocks,threadsPerBlock>>>(d_a,d_b);
@@ -173,7 +174,7 @@ int main(){
   assign<<<1,1>>>(d_a, d_speNum);
   cudaDeviceSynchronize();
 
-  clock_t endTime = clock();
+  // clock_t endTime = clock();
 
   cudaMemcpy(sum, d_sum, sizeof(double), cudaMemcpyDeviceToHost);
   cudaMemcpy(speNum, d_speNum, twosize, cudaMemcpyDeviceToHost);
@@ -185,7 +186,7 @@ int main(){
   cout.precision(8);
 
   // cout<<"time: "<<endTime<<"   "<<startTime<<"   "<<CLOCKS_PER_SEC<<endl;
-  cout<<"time: "<<(endTime-startTime)*1000/double(CLOCKS_PER_SEC)<<endl;
+  cout<<"time: "<<(clock()-startTime)/double(CLOCKS_PER_SEC)<<endl;
   cout<<"Sum: "<<sum[0]<<endl;
   cout<<"A[n/2][n/2]: "<<speNum[0]<<"    "<<A[count/2+N/2]<<"    "<<B[count/2+N/2]<<endl;
   cout<<"A[17][31]: "<<speNum[1]<<"    "<<A[17*N+31]<<"    "<<B[17*N+31]<<endl;
