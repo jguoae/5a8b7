@@ -100,7 +100,7 @@ __global__ void reduction (double *in, double *out) {
     temp[id] += temp[id+256]; __syncthreads();
   }
   if(id<128){
-    temp[id] += temp[id+128]; __syncthreads();
+    temp[id] +=   temp[id+128]; __syncthreads();
   }
   if(id<64){
     temp[id] += temp[id+64]; __syncthreads();
@@ -174,11 +174,14 @@ int main(){
   assign<<<1,1>>>(d_a, d_speNum);
   cudaDeviceSynchronize();
 
-  int endTime = clock();
+
   cudaMemcpy(sum, d_sum, sizeof(double), cudaMemcpyDeviceToHost);
   cudaMemcpy(speNum, d_speNum, twosize, cudaMemcpyDeviceToHost);
   cudaMemcpy(B, d_a, size, cudaMemcpyDeviceToHost);
   cudaFree(d_a);cudaFree(d_b);cudaFree(d_partSum);cudaFree(d_ppartSum);cudaFree(d_sum);cudaFree(d_speNum);
+
+  int endTime = clock();
+
   cout.precision(8);
 
   cout<<"time: "<<endTime<<"   "<<startTime<<"   "<<CLOCKS_PER_SEC<<endl;
