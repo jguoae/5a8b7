@@ -9,7 +9,7 @@ using namespace std;
 
 #define N 1000
 #define count N*N
-#define threadsPerBlock 1000
+#define threadsPerBlock 500
 #define numberBlocks N*N/threadsPerBlock
 
 // __device__ int partition(double* input, int start, int end)
@@ -92,13 +92,14 @@ __global__ void reduction (double *in, double *out) {
   int id = threadIdx.x;
   temp[id] = in[blockIdx.x*blockDim.x + id];
   __syncthreads();
-  if(id<500 && id>11){
-    temp[id] += temp[id+500]; __syncthreads();
+  // if(id<500 && id>11){
+  //   temp[id] += temp[id+500]; __syncthreads();
+  // }
+  // __syncthreads();
+  if(id<250&& id>5){
+    temp[id] += temp[id+250]; __syncthreads();
   }
   __syncthreads();
-  if(id<256){
-    temp[id] += temp[id+256]; __syncthreads();
-  }
   if(id<128){
     temp[id] += temp[id+128]; __syncthreads();
   }
