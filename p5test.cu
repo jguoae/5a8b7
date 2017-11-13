@@ -181,10 +181,10 @@ int main(){
   assign<<<1,1>>>(d_a, d_speNum);
   cudaDeviceSynchronize();
   // clock_t endbbb = clock();
-  cudaEventRecord(endTime, 0);
-  cudaEventSynchronize(endTime) ;
-  float time;
-  cudaEventElapsedTime(&time,startTime,endTime);
+  // cudaEventRecord(endTime, 0);
+  // cudaEventSynchronize(endTime) ;
+  // float time;
+  // cudaEventElapsedTime(&time,startTime,endTime);
   auto end = std::chrono::system_clock::now();
   std::chrono::duration<double> elapsed_seconds = end-start;
 
