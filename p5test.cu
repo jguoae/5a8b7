@@ -61,7 +61,10 @@ __device__ void sort(double* input){
 
 __global__ void median (double *a, double *b) {
   int number = blockIdx.x*blockDim.x + threadIdx.x;
-  if((number > N-1) && (number/N > 0) && (number/N < N-1) && (number < N*N-N)){
+  if((number <N) || (number>=N*N-N)||(number/N==0)||(number/N==N-1)){
+    b[number]=a[number];
+  }
+  else if((number > N-1) && (number/N > 0) && (number/N < N-1) && (number < N*N-N)){
     double tempCompare[5];
     tempCompare[0] = a[number];
     tempCompare[1] = a[number-1];
@@ -73,9 +76,9 @@ __global__ void median (double *a, double *b) {
     sort(tempCompare);
     b[number]=tempCompare[2];
   }
-  else if(number < N*N){
-    b[number]=a[number];
-  }
+  // else if(number < N*N){
+  //   b[number]=a[number];
+  // }
   __syncthreads();
 }
 
@@ -198,6 +201,7 @@ cout<<"A[999][999]: "<<A[999*N+999]<<"    "<<B[999*N+999]<<endl;
   cout<<"A[999][999]: "<<A[999*N+999]<<"    "<<B[999*N+999]<<endl;
   cout<<"A[999][500]: "<<A[999*N+500]<<"    "<<B[999*N+500]<<endl;
   cout<<"A[500][999]: "<<A[500*N+999]<<"    "<<B[500*N+999]<<endl;
+  cout<<"A[500][0]: "<<A[500*N]<<"    "<<B[500*N]<<endl;
 
   return 0;
 }
