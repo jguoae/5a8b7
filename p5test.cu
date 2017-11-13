@@ -162,10 +162,12 @@ int main(){
   cudaMalloc((void **)&d_speNum,twosize);
   cudaMemcpy(d_a, A, size, cudaMemcpyHostToDevice);
   cudaMemcpy(d_sum, sum, sizeof(double), cudaMemcpyHostToDevice);
-  clock_t startaaa = clock();
-  // cudaEvent_t startTime=0, endTime=0;
+  // clock_t startaaa = clock();
+  cudaEvent_t startTime=0, endTime=0;
+  cudaEventCreate(&startTime);
+  cudaEventCreate(&endTime);
   // auto start = std::chrono::system_clock::now();
-  // cudaEventRecord(startTime, 0);
+  cudaEventRecord(startTime, 0);
   for(int i=0;i<10;i++){
       median<<<numberBlocks,threadsPerBlock>>>(d_a,d_b);
       cudaDeviceSynchronize();
@@ -180,11 +182,11 @@ int main(){
   for(int i=0;i<100;i++){
     int x = i;
   }
-  clock_t endbbb = clock();
-  // cudaEventRecord(endTime, 0);
-  // cudaEventSynchronize(endTime) ;
-  // float time;
-  // cudaEventElapsedTime(&time,startTime,endTime);
+  // clock_t endbbb = clock();
+  cudaEventRecord(endTime, 0);
+  cudaEventSynchronize(endTime) ;
+  float time;
+  cudaEventElapsedTime(&time,startTime,endTime);
   // auto end = std::chrono::system_clock::now();
   // std::chrono::duration<double> elapsed_seconds = end-start;
 
@@ -196,9 +198,9 @@ int main(){
 
   cout.precision(8);
 
-  cout<<"time: "<<endbbb<<"   "<<startaaa<<"   "<<CLOCKS_PER_SEC<<endl;
+  // cout<<"time: "<<endbbb<<"   "<<startaaa<<"   "<<CLOCKS_PER_SEC<<endl;
   // cout<<"time: "<<(endTime-startTime)/CLOCKS_PER_SEC<<endl;
-  // cout<<"time: "<<elapsed_seconds.count()<<endl;
+  cout<<"time: "<<time<<endl;
   cout<<"Sum: "<<sum[0]<<endl;
   cout<<"A[n/2][n/2]: "<<speNum[0]<<"    "<<A[count/2+N/2]<<"    "<<B[count/2+N/2]<<endl;
   cout<<"A[17][31]: "<<speNum[1]<<"    "<<A[17*N+31]<<"    "<<B[17*N+31]<<endl;
