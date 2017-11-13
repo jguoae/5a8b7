@@ -7,7 +7,7 @@
 #include <vector>
 using namespace std;
 
-#define N 4000
+#define N 1000
 #define count N*N
 #define threadsPerBlock 1000
 #define numberBlocks N*N/threadsPerBlock
@@ -161,7 +161,7 @@ int main(){
   cudaMalloc((void **)&d_speNum,twosize);
   cudaMemcpy(d_a, A, size, cudaMemcpyHostToDevice);
   cudaMemcpy(d_sum, sum, sizeof(double), cudaMemcpyHostToDevice);
-  int startTime = clock();
+  clock_t startTime = clock();
 
   for(int i=0;i<10;i++){
       median<<<numberBlocks,threadsPerBlock>>>(d_a,d_b);
@@ -175,13 +175,14 @@ int main(){
   assign<<<1,1>>>(d_a, d_speNum);
   cudaDeviceSynchronize();
 
+  clock_t endTime = clock();
 
   cudaMemcpy(sum, d_sum, sizeof(double), cudaMemcpyDeviceToHost);
   cudaMemcpy(speNum, d_speNum, twosize, cudaMemcpyDeviceToHost);
   cudaMemcpy(B, d_a, size, cudaMemcpyDeviceToHost);
   cudaFree(d_a);cudaFree(d_b);cudaFree(d_partSum);cudaFree(d_ppartSum);cudaFree(d_sum);cudaFree(d_speNum);
 
-  int endTime = clock();
+
 
   cout.precision(8);
 
