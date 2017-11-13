@@ -164,7 +164,7 @@ int main(){
   cudaMemcpy(d_sum, sum, sizeof(double), cudaMemcpyHostToDevice);
   clock_t startTime = clock();
   // cudaEvent_t startTime=0, endTime=0;
-  auto start = std::chrono::system_clock::now();
+  // auto start = std::chrono::system_clock::now();
   // cudaEventRecord(startTime, 0);
   for(int i=0;i<10;i++){
       median<<<numberBlocks,threadsPerBlock>>>(d_a,d_b);
@@ -183,8 +183,8 @@ int main(){
   // cudaEventSynchronize(endTime) ;
   // float time;
   // cudaEventElapsedTime(&time,startTime,endTime);
-  auto end = std::chrono::system_clock::now();
-  std::chrono::duration<double> elapsed_seconds = end-start;
+  // auto end = std::chrono::system_clock::now();
+  // std::chrono::duration<double> elapsed_seconds = end-start;
 
   cudaMemcpy(sum, d_sum, sizeof(double), cudaMemcpyDeviceToHost);
   cudaMemcpy(speNum, d_speNum, twosize, cudaMemcpyDeviceToHost);
